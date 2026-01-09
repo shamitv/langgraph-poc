@@ -1,0 +1,24 @@
+Meeting Date: January 14, 2026 at 01:00 PM
+
+Amit: Alright everyone, thanks for joining. Let's get started with the travel planning.
+
+Priya: Bangalore might be easier since most of the team is already there.
+Alice: Let me check flight prices and get back to you.
+Amit: Have we decided on a location yet?
+David: That should be enough if we book early.
+Alice: I'd say three days. We have a lot to cover.
+Amit: I was thinking Bangalore or maybe Pune. Both have good venues.
+Priya: We have about two lakhs for the whole thing including travel.
+Bob: Should we do two days or three?
+
+David: We're going with Pune for the offsite.
+Bob: It will be a three day event in the second week of next month.
+
+Alice: Amit, can you book the conference room at the Pune office.
+Amit: Got it, I'll take care of that.
+Amit: Alice, please send out the travel survey to the team.
+Alice: Got it, I'll take care of that.
+David: Alice, will you get quotes from the travel agency.
+Alice: Got it, I'll take care of that.
+
+Amit: Great meeting. Talk to you all soon.

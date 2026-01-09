@@ -1,0 +1,26 @@
+Meeting Date: January 16, 2026 at 03:00 PM
+
+David: Alright everyone, thanks for joining. Let's get started with the recruitment drive review.
+
+David: That's a good conversion rate actually.
+Neha: Overall I think it was successful. We made 12 offers.
+David: Most of them said the process was smooth. A few mentioned long wait times.
+Neha: When do the new hires start?
+David: Any feedback from the candidates?
+Neha: Agreed. The bottleneck was in the technical rounds.
+David: Eight confirmed. Still waiting on the rest.
+David: The coding challenge worked really well as a filter.
+Bob: Yeah we should use that format again next time.
+David: Let's review how the campus recruitment drive went.
+
+David: We'll use the same coding challenge format next year.
+Neha: We'll add more technical interviewers for the next drive.
+
+Neha: David, can you compile the final acceptance numbers.
+David: Got it, I'll take care of that.
+Bob: David, please send thank you notes to the campus coordinators.
+David: Got it, I'll take care of that.
+Neha: Bob, will you prepare the onboarding schedule for the new hires.
+Bob: Got it, I'll take care of that.
+
+David: Perfect. I'll send out the meeting notes.

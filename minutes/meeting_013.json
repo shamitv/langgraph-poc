@@ -1,0 +1,24 @@
+{
+  "summary": "Discussion on export formats (CSV/PDF), mobile prototype timeline, and requirements document updates. Decisions: Export formats agreed, mobile prototype ready by next month. Action items: John to update requirements, send timeline, schedule review.",
+  "decisions": [
+    "Export formats agreed (CSV/PDF)",
+    "Mobile prototype ready by next month"
+  ],
+  "action_items": [
+    {
+      "task": "Update requirements document",
+      "owner": null,
+      "due_date": null
+    },
+    {
+      "task": "Send updated timeline",
+      "owner": null,
+      "due_date": null
+    },
+    {
+      "task": "Schedule next progress review",
+      "owner": null,
+      "due_date": null
+    }
+  ]
+}

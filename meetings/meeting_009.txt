@@ -1,0 +1,27 @@
+Meeting Date: January 22, 2026 at 11:00 AM
+
+Priya: Alright everyone, thanks for joining. Let's get started with the quarterly planning.
+
+Amit: We might need to bring in one more mobile developer.
+Eve: That's aggressive. Do we have the resources?
+Amit: Agreed. What can we deprioritize?
+Priya: The mobile app is the revenue driver so that has to be first.
+Rahul: I'm concerned we're taking on too much.
+Charlie: From a product perspective we need to launch the mobile app.
+Priya: Alright let's align on the goals for next quarter.
+Rahul: Fair point. Let's prioritize ruthlessly.
+Charlie: That makes sense. It's not customer facing anyway.
+Eve: What about the infrastructure improvements we discussed?
+Amit: Maybe push the admin dashboard redesign to next quarter.
+
+Amit: Mobile app launch is the top priority for next quarter.
+Eve: Admin dashboard redesign is moved to Q2.
+
+Charlie: Eve, can you update the quarterly OKRs document.
+Eve: Got it, I'll take care of that.
+Eve: Charlie, please work with HR on the new role opening.
+Charlie: Got it, I'll take care of that.
+Priya: Eve, will you schedule the kickoff meeting for the mobile project.
+Eve: Got it, I'll take care of that.
+
+Eve: Thanks everyone. Have a good rest of your day.

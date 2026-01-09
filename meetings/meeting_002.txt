@@ -1,0 +1,26 @@
+Meeting Date: January 08, 2026 at 04:00 PM
+
+Rahul: Alright everyone, thanks for joining. Let's get started with the sprint planning.
+
+David: Okay let's look at the backlog and figure out what we can commit to.
+Eve: Got it. Let me pull up the prioritized list.
+Neha: That makes sense. So that would be two stories then.
+Eve: So we have about 40 story points capacity this sprint right?
+Eve: This user story seems too big. Can we break it down?
+Neha: What about this bug? It's been in the backlog for a while.
+Rahul: Can we get a quick estimate on this new feature request?
+Rahul: Let's focus on the must-haves first and see where we land.
+Rahul: Yeah I was thinking the same thing. Maybe split the frontend and backend work.
+Eve: It's low priority but if we have time we should look at it.
+
+David: Okay so we're committing to these five stories for the sprint.
+Neha: We'll leave the nice-to-haves in the backlog for now.
+
+Rahul: Eve, can you add the acceptance criteria to this story.
+Eve: Got it, I'll take care of that.
+David: Neha, please reach out to the design team for the mockups.
+Neha: Got it, I'll take care of that.
+David: Neha, will you update the sprint goal in Jira.
+Neha: Got it, I'll take care of that.
+
+Eve: Great meeting. Talk to you all soon.

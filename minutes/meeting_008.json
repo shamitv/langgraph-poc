@@ -1,0 +1,19 @@
+{
+  "summary": "Team lunch planning discussed with restaurant options and time confirmation.",
+  "decisions": [
+    "Lunch confirmed for 1 PM tomorrow",
+    "Poll to select restaurant options"
+  ],
+  "action_items": [
+    {
+      "task": "Send poll with restaurant options",
+      "owner": "Amit",
+      "due_date": "2026-01-20"
+    },
+    {
+      "task": "Make reservation and remind",
+      "owner": "Rahul",
+      "due_date": null
+    }
+  ]
+}

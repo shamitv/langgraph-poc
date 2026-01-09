@@ -1,0 +1,28 @@
+Meeting Date: February 13, 2026 at 10:00 AM
+
+Neha: Alright everyone, thanks for joining. Let's get started with the all hands meeting.
+
+Charlie: When's the next company event?
+Bob: On the product side we're launching two major features.
+Bob: Please make them feel welcome.
+John: That's a 20 percent increase from last year.
+Charlie: We also have some new hires joining next month.
+John: We have some exciting updates to share today.
+Bob: Good morning everyone. Thanks for joining the all hands.
+Neha: First up we hit our revenue target for the quarter.
+John: Congratulations to everyone who contributed.
+Neha: Good question. We're planning something for the end of the quarter.
+Neha: Any questions so far?
+Charlie: The team has been working really hard on these.
+
+Charlie: Company event is scheduled for end of quarter.
+Bob: Onboarding for new hires will begin next month.
+
+Bob: Neha, can you send the all hands recording to everyone.
+Neha: Got it, I'll take care of that.
+Neha: John, please update the company wiki with the new announcements.
+John: Got it, I'll take care of that.
+Neha: Bob, will you coordinate with HR on the onboarding schedule.
+Bob: Got it, I'll take care of that.
+
+Bob: Thanks everyone. Have a good rest of your day.

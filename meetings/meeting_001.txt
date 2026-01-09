@@ -1,0 +1,28 @@
+Meeting Date: January 06, 2026 at 03:00 PM
+
+Priya: Alright everyone, thanks for joining. Let's get started with the sprint demo.
+
+John: Can you show us the filtering feature?
+John: Okay so this is the new dashboard we've been working on.
+Priya: Is this ready for production or do we need more testing?
+Neha: How long did that take to implement?
+John: Great work team, this is exactly what we needed.
+Neha: Yes, we added validation for that. Let me show you.
+John: About three days, the API integration was tricky.
+Neha: That looks really good. Did you handle the edge case we discussed?
+Neha: Nice! The stakeholders are going to love this.
+John: Yeah sure, so when you click here... um... the dropdown appears and you can filter by date.
+Neha: So let me share my screen and walk you through what we built this sprint.
+Neha: We still need QA to sign off but the core functionality is complete.
+
+Priya: Alright so we're agreeing to deploy this to staging tomorrow.
+Priya: Let's plan the production release for next Thursday.
+
+John: Neha, can you update the release notes before end of day.
+Neha: Got it, I'll take care of that.
+John: Priya, please schedule a quick demo with the product team.
+Priya: Got it, I'll take care of that.
+John: Neha, will you run the performance tests one more time.
+Neha: Got it, I'll take care of that.
+
+Neha: Perfect. I'll send out the meeting notes.

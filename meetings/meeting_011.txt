@@ -1,0 +1,24 @@
+Meeting Date: January 26, 2026 at 10:00 AM
+
+Bob: Alright everyone, thanks for joining. Let's get started with the one on one sync.
+
+Bob: Things are okay. Been a bit busy with the new project.
+Amit: Is there anything you'd like me to focus on in the meantime?
+Rahul: Got it. I can talk to the team about redistributing some tasks.
+Bob: Yeah I noticed. How are you feeling about the workload?
+Charlie: It's manageable but I could use some help on the testing side.
+Bob: Hey how's everything going? Just wanted to catch up.
+Bob: You've earned it. Your work on the API redesign was excellent.
+Bob: Happy to do that. She's picking things up quickly.
+
+Alice: We'll redistribute some testing tasks to balance the workload.
+Bob: Mentoring the new hire will be added to your goals.
+
+Bob: Charlie, can you set up recurring syncs with the new hire.
+Charlie: Got it, I'll take care of that.
+Charlie: Rahul, please send me your self-review by Friday.
+Rahul: Got it, I'll take care of that.
+Bob: Charlie, will you jot down any blockers for our next chat.
+Charlie: Got it, I'll take care of that.
+
+Amit: Perfect. I'll send out the meeting notes.

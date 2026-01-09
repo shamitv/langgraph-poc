@@ -1,0 +1,25 @@
+Meeting Date: January 18, 2026 at 02:00 PM
+
+Eve: Alright everyone, thanks for joining. Let's get started with the architecture review.
+
+David: What about the shared database? That's usually the tricky part.
+Eve: It's relatively isolated and has clear boundaries.
+John: We're looking at migrating from the monolith to microservices right?
+David: That seems reasonable. What are the main risks?
+Priya: Have you estimated the timeline?
+John: We're planning to use the strangler pattern and slowly move data.
+Priya: Definitely gradual. We'll start with the payment module.
+David: Why payments first?
+Priya: Correct. The current system is becoming hard to scale.
+
+Eve: We'll proceed with the microservices migration starting with payments.
+John: We'll use Kubernetes for orchestration.
+
+John: Priya, can you document the API contracts for the payment service.
+Priya: Got it, I'll take care of that.
+Priya: John, please set up the new repository structure.
+John: Got it, I'll take care of that.
+David: Eve, will you schedule a deep dive session on the data migration.
+Eve: Got it, I'll take care of that.
+
+Eve: Good discussion. Let's reconvene next week.

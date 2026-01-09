@@ -1,0 +1,24 @@
+{
+  "summary": "Project review and risk management decisions were discussed, including a third-party integration risk and buffer days, with action items assigned to stakeholders.",
+  "decisions": [
+    "Add buffer days for third-party integration",
+    "Schedule risk review meeting next week"
+  ],
+  "action_items": [
+    {
+      "task": "Update project status document",
+      "owner": "Neha",
+      "due_date": null
+    },
+    {
+      "task": "Send stakeholder update email",
+      "owner": "Alice",
+      "due_date": null
+    },
+    {
+      "task": "Prepare risk register",
+      "owner": "Alice",
+      "due_date": null
+    }
+  ]
+}

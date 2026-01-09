@@ -1,0 +1,26 @@
+Meeting Date: February 07, 2026 at 02:00 PM
+
+Bob: Alright everyone, thanks for joining. Let's get started with the marketing strategy.
+
+Bob: What's our target audience?
+John: Should we focus on social media or email?
+Charlie: Let's also do a blog post explaining the benefits.
+Priya: Do we have budget for paid ads?
+Charlie: So we need to plan the launch campaign for the new feature.
+Charlie: What about a webinar? Those work well for demos.
+Bob: Primarily small business owners. They're our fastest growing segment.
+Bob: That makes sense. Warm leads are more likely to convert.
+Bob: I'll start drafting the content calendar.
+Charlie: A small amount. Maybe focus on retargeting.
+
+Charlie: We'll run a webinar as the main launch event.
+John: Paid ads will focus on retargeting existing users.
+
+Charlie: John, can you create the email campaign drafts.
+John: Got it, I'll take care of that.
+Charlie: Bob, please schedule the webinar date with the product team.
+Bob: Got it, I'll take care of that.
+Priya: John, will you prepare the social media content.
+John: Got it, I'll take care of that.
+
+John: Alright that's a wrap. Thanks everyone.
