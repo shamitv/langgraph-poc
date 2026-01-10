@@ -269,8 +269,10 @@ def run_tool_loop(messages: list, max_rounds: int = 10) -> tuple[Any, list[tuple
 #    (B) Iterate in Python over each meeting file
 #    (C) For each file, ask model to read + extract + save via tools
 # =============================================================================
-MEETINGS_DIR = "../data/meetings/transcripts"
-MINUTES_DIR = "../data/meetings/minutes"
+# Resolve paths relative to this script's location (not CWD)
+_SCRIPT_DIR = Path(__file__).parent.resolve()
+MEETINGS_DIR = str(_SCRIPT_DIR / "../data/meetings/transcripts")
+MINUTES_DIR = str(_SCRIPT_DIR / "../data/meetings/minutes")
 
 # System prompt used for per-file processing.
 # We explicitly tell the model to:
