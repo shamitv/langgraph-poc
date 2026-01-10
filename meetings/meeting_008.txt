@@ -1,0 +1,25 @@
+Meeting Date: January 20, 2026 at 12:00 PM
+
+Eve: Alright everyone, thanks for joining. Let's get started with the team lunch planning.
+
+Amit: Oh the Italian one? I heard mixed reviews.
+Amit: That was good but some people wanted to try something different.
+Eve: Yeah that's probably the fairest way.
+Eve: What about that new place near the office? They have good options.
+Rahul: I can make the reservation once we decide.
+Rahul: Definitely. Last time we had to wait for an hour.
+Rahul: There's also that Indian restaurant we went to last time.
+Rahul: Hey so we need to figure out where to go for the team lunch tomorrow.
+Eve: Should we book in advance? We're a big group.
+
+Amit: We'll do a poll and finalize by end of day.
+Rahul: Lunch is confirmed for 1 PM tomorrow.
+
+Amit: Rahul, can you send out the poll with the restaurant options.
+Rahul: Got it, I'll take care of that.
+Eve: Amit, please make the reservation once we decide.
+Amit: Got it, I'll take care of that.
+Eve: Rahul, will you remind everyone about the time.
+Rahul: Got it, I'll take care of that.
+
+Rahul: Alright that's a wrap. Thanks everyone.

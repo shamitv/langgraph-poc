@@ -1,0 +1,24 @@
+{
+  "summary": "Quarterly planning discussed, mobile app launch prioritized, admin dashboard redesign moved to Q2, and tasks assigned to team members.",
+  "decisions": [
+    "Mobile app launch is the top priority for next quarter",
+    "Admin dashboard redesign is moved to Q2"
+  ],
+  "action_items": [
+    {
+      "task": "Update quarterly OKRs document",
+      "owner": "Eve",
+      "due_date": null
+    },
+    {
+      "task": "Work with HR on new role opening",
+      "owner": "Charlie",
+      "due_date": null
+    },
+    {
+      "task": "Schedule mobile project kickoff meeting",
+      "owner": "Priya",
+      "due_date": null
+    }
+  ]
+}

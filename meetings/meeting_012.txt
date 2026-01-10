@@ -1,0 +1,26 @@
+Meeting Date: January 28, 2026 at 11:00 AM
+
+Priya: Alright everyone, thanks for joining. Let's get started with the budget review.
+
+Bob: Barely. People have been too busy to take courses.
+Priya: Any unexpected expenses we should know about?
+Neha: How much is that?
+Bob: I'll send a reminder to the team.
+Priya: We've spent about 70 percent so far.
+Neha: Let's look at where we are with the quarterly budget.
+Priya: About fifty thousand. It's already accounted for.
+Priya: What about the training budget? Any utilization there?
+Priya: Most of it was the new server infrastructure.
+Priya: That seems high. We're only halfway through the quarter.
+
+Bob: We'll push the team to use the training budget.
+Bob: No changes needed to the budget allocation.
+
+Priya: Bob, can you send a reminder about the training budget.
+Bob: Got it, I'll take care of that.
+Priya: Bob, please prepare the mid-quarter budget report.
+Bob: Got it, I'll take care of that.
+Priya: Bob, will you confirm the license renewal amount.
+Bob: Got it, I'll take care of that.
+
+Bob: Alright that's a wrap. Thanks everyone.

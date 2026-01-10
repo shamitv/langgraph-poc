@@ -1,0 +1,27 @@
+Meeting Date: February 01, 2026 at 03:00 PM
+
+Bob: Alright everyone, thanks for joining. Let's get started with the design workshop.
+
+Amit: Definitely. Small animations can make a big difference.
+Charlie: Good idea. Users drop off at the third step currently.
+Charlie: What if we make some of them optional and ask later?
+Charlie: We could also add some tooltips explaining why we need the info.
+Amit: Okay so today we're going to brainstorm the new user onboarding flow.
+Bob: True. Transparency helps with conversion.
+Bob: Should we start with the current pain points?
+Charlie: Can we add some micro-interactions? Makes it feel more polished.
+Amit: Let me sketch out a quick wireframe.
+Bob: That's the profile completion screen right?
+Amit: Yeah. Too many required fields.
+
+Bob: We'll implement progressive profiling in the onboarding flow.
+Charlie: Tooltips will be added to explain required fields.
+
+Charlie: Bob, can you create high-fidelity mockups by next week.
+Bob: Got it, I'll take care of that.
+Bob: Charlie, please run some user tests on the new flow.
+Charlie: Got it, I'll take care of that.
+Amit: Charlie, will you document the design decisions.
+Charlie: Got it, I'll take care of that.
+
+Amit: Great meeting. Talk to you all soon.

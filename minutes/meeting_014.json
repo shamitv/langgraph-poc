@@ -1,0 +1,30 @@
+{
+  "summary": "Meeting discussed enhancing user onboarding flow with animations, tooltips, and task assignments.",
+  "decisions": [
+    "Implement progressive profiling in onboarding flow",
+    "Add tooltips for required fields",
+    "Assign tasks to Bob, Charlie, and Amit"
+  ],
+  "action_items": [
+    {
+      "task": "Create high-fidelity mockups",
+      "owner": "Bob",
+      "due_date": "2026-02-25"
+    },
+    {
+      "task": "Run user tests",
+      "owner": "Charlie",
+      "due_date": null
+    },
+    {
+      "task": "Document design decisions",
+      "owner": "Charlie",
+      "due_date": null
+    },
+    {
+      "task": "Sketch wireframe",
+      "owner": "Amit",
+      "due_date": null
+    }
+  ]
+}

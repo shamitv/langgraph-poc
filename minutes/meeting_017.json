@@ -1,0 +1,25 @@
+{
+  "summary": "Key decisions: target audience (small business owners), webinar as main launch event, budget allocation (paid ads for retargeting). Action items: John (email campaigns), Charlie (webinar scheduling), Priya (social media content).",
+  "decisions": [
+    "Target audience: small business owners",
+    "Webinar as main launch event",
+    "Budget allocation: paid ads for retargeting"
+  ],
+  "action_items": [
+    {
+      "task": "Create email campaign drafts",
+      "owner": "John",
+      "due_date": null
+    },
+    {
+      "task": "Schedule webinar with product team",
+      "owner": "Bob",
+      "due_date": null
+    },
+    {
+      "task": "Prepare social media content",
+      "owner": "Priya",
+      "due_date": null
+    }
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "summary": "Agreed to deploy the sprint demo to staging and plan production release for next Thursday.",
+  "decisions": [
+    "Deploy sprint demo to staging tomorrow",
+    "Plan production release for next Thursday"
+  ],
+  "action_items": [
+    {
+      "task": "Schedule product demo",
+      "owner": "Priya",
+      "due_date": "2026-01-06T23:59:59"
+    },
+    {
+      "task": "Update release notes",
+      "owner": "Neha",
+      "due_date": "2026-01-06T23:59:59"
+    },
+    {
+      "task": "Run performance tests",
+      "owner": "Neha",
+      "due_date": "2026-01-06T23:59:59"
+    },
+    {
+      "task": "Ensure filtering feature ready",
+      "owner": "John",
+      "due_date": null
+    },
+    {
+      "task": "Coordinate with product team",
+      "owner": "Priya",
+      "due_date": null
+    }
+  ]
+}

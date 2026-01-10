@@ -1,0 +1,26 @@
+Meeting Date: February 05, 2026 at 12:00 PM
+
+Amit: Alright everyone, thanks for joining. Let's get started with the security audit.
+
+David: That's concerning. What are they?
+Charlie: SQL injection in the search endpoint and two XSS vulnerabilities.
+Amit: Let's review the findings from last week's security scan.
+Alice: We need to get those deployed ASAP.
+David: Have we patched them?
+David: The SQL injection is fixed. XSS patches are in review.
+Charlie: What about the penetration test?
+David: Good. Make sure we're fully patched before that.
+Bob: Agreed. I'll expedite the review.
+Bob: That's scheduled for next month.
+
+Charlie: XSS patches will be expedited and deployed this week.
+David: A follow-up security scan will be run after all patches.
+
+David: Charlie, can you expedite the code review for the XSS fixes.
+Charlie: Got it, I'll take care of that.
+Charlie: Alice, please schedule the follow-up security scan.
+Alice: Got it, I'll take care of that.
+Charlie: David, will you prepare the security report for management.
+David: Got it, I'll take care of that.
+
+Charlie: Great meeting. Talk to you all soon.

@@ -1,0 +1,24 @@
+Meeting Date: February 11, 2026 at 04:00 PM
+
+David: Alright everyone, thanks for joining. Let's get started with the training session.
+
+David: GitFlow uses long-lived feature branches while trunk-based uses short-lived ones.
+Amit: Those go directly to main with expedited review.
+Rahul: Are we covering branching strategies today?
+Charlie: Makes sense. Can you show us an example?
+Rahul: How do we handle releases then?
+Rahul: Which one do we use here?
+Rahul: We use release tags instead of release branches.
+David: We're moving towards trunk-based for faster iterations.
+
+Amit: The team will adopt trunk-based development.
+Rahul: Release tags will replace release branches.
+
+Rahul: Amit, can you share the training slides with the team.
+Amit: Got it, I'll take care of that.
+John: David, please update the contributing guidelines.
+David: Got it, I'll take care of that.
+John: Rahul, will you schedule a follow-up Q&A session.
+Rahul: Got it, I'll take care of that.
+
+Rahul: Thanks everyone. Have a good rest of your day.

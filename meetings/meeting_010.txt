@@ -1,0 +1,27 @@
+Meeting Date: January 24, 2026 at 11:00 AM
+
+Priya: Alright everyone, thanks for joining. Let's get started with the incident post-mortem.
+
+Priya: That's too slow. We need to tune those thresholds.
+John: Do we know what triggered it?
+Neha: So let's go through what happened during yesterday's outage.
+John: The alert fired but it was delayed by about 10 minutes.
+Neha: Agreed. No blame here just looking for improvements.
+Priya: The database ran out of connections around 3 PM.
+Charlie: Yes. We clearly need better connection pooling.
+Amit: Yeah there was a batch job that wasn't releasing connections properly.
+Neha: How long were we down?
+Amit: What about monitoring? Did we get alerted?
+John: This is the second time this has happened right?
+
+Amit: We'll implement connection pooling across all services.
+John: Alert thresholds will be reviewed and tightened.
+
+Amit: Priya, can you create the ticket for connection pooling.
+Priya: Got it, I'll take care of that.
+John: Amit, please document this incident in the runbook.
+Amit: Got it, I'll take care of that.
+Charlie: Neha, will you review the alert configuration.
+Neha: Got it, I'll take care of that.
+
+Charlie: Perfect. I'll send out the meeting notes.

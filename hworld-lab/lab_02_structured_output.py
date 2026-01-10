@@ -12,7 +12,7 @@ Prereqs (install once):
   pip install pydantic langchain-openai langchain-core
 
 Run:
-  python llm_hworld_structured.py
+  python lab_02_structured_output.py
 
 Notes:
 - Your local server must expose an OpenAI-compatible endpoint at:

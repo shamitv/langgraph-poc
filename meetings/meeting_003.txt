@@ -1,0 +1,28 @@
+Meeting Date: January 10, 2026 at 12:00 PM
+
+David: Alright everyone, thanks for joining. Let's get started with the project review.
+
+Neha: Yeah we have a call scheduled with them next week.
+Priya: We're slightly under actually which is good news.
+Alice: Have you reached out to their support team?
+Rahul: Let's go through the project status and see where we are.
+Priya: Okay let's flag that as a potential delay.
+Priya: What about the budget? Are we still within the allocated amount?
+Rahul: Perfect. Let's make sure we document these risks properly.
+Rahul: Their API documentation is outdated and we've hit some roadblocks.
+Alice: So we're about 60 percent through the timeline.
+Priya: Are we on track with the milestones?
+Rahul: What's the issue there?
+Rahul: Mostly yes but there's a risk with the third-party integration.
+
+Priya: We'll add two buffer days to the timeline for the integration work.
+Priya: Let's schedule a risk review meeting for next week.
+
+Rahul: Neha, can you update the project status document.
+Neha: Got it, I'll take care of that.
+Neha: Alice, please send the stakeholder update email.
+Alice: Got it, I'll take care of that.
+Priya: Alice, will you prepare the risk register for the next meeting.
+Alice: Got it, I'll take care of that.
+
+Alice: Great meeting. Talk to you all soon.

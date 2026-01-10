@@ -1,0 +1,25 @@
+Meeting Date: January 30, 2026 at 02:00 PM
+
+Alice: Alright everyone, thanks for joining. Let's get started with the client meeting.
+
+Charlie: The format of the exported reports. CSV or PDF?
+Charlie: So the development is progressing well. We're about a week ahead of schedule.
+Charlie: Absolutely. That's easy to add.
+Alice: Can we do both? Different users have different needs.
+Charlie: Perfect. What about the mobile version?
+Rahul: What specifically?
+Charlie: That's on track for phase two. Should have a prototype next month.
+Rahul: The only thing is we need some clarification on the reporting requirements.
+Alice: Excellent. Keep up the good work.
+
+Rahul: Reports will support both CSV and PDF exports.
+Charlie: Mobile prototype will be ready by next month.
+
+Alice: John, can you update the requirements document with the export formats.
+John: Got it, I'll take care of that.
+Charlie: John, please send the client the updated timeline.
+John: Got it, I'll take care of that.
+Alice: John, will you schedule the next progress review.
+John: Got it, I'll take care of that.
+
+Charlie: Perfect. I'll send out the meeting notes.

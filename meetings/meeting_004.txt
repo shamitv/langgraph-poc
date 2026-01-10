@@ -1,0 +1,25 @@
+Meeting Date: January 12, 2026 at 02:00 PM
+
+John: Alright everyone, thanks for joining. Let's get started with the hiring discussion.
+
+Alice: Fair point. What about the second candidate?
+John: The third one was okay but seemed less experienced than the resume suggested.
+David: What made you feel that way?
+David: Yes let's set that up for early next week.
+Amit: Just some of the answers about teamwork seemed... I don't know... rehearsed.
+David: I agree. Her system design solution was impressive too.
+David: Yeah but I'm a bit concerned about culture fit.
+John: She was great. Good communication and asked really thoughtful questions.
+Alice: I think so. Should we do a final round with the hiring manager?
+
+John: We're moving forward with candidate two for final round.
+David: We'll pass on candidates one and three.
+
+Alice: John, can you send the rejection emails to the other candidates.
+John: Got it, I'll take care of that.
+Alice: David, please coordinate with HR for the final interview.
+David: Got it, I'll take care of that.
+David: Amit, will you prepare the salary discussion points.
+Amit: Got it, I'll take care of that.
+
+David: Perfect. I'll send out the meeting notes.
