@@ -1,0 +1,8 @@
+Reference date: 2026-01-05
+Meeting: Misc / Chaos Notes
+
+- decid: stop using old auth endpoint by feb
+- ai: update docs + notify integrators
+- ai: rotate api keys for partnerX (urgent)
+- next meeting maybe Tue?
+- also talked about "rate limit errors" after new release

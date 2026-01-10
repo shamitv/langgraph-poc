@@ -20,10 +20,10 @@ pip install pydantic langchain-openai langchain-core
 Folder setup
 ------------
 Create:
-  ./meetings   (put .txt meeting notes here)
-  ./minutes    (will be created if missing)
+  ../data/meetings/transcripts   (put .txt meeting notes here)
+  ../data/meetings/minutes       (will be created if missing)
 
-Example file: ./meetings/meeting_001.txt
+Example file: ../data/meetings/transcripts/meeting_001.txt
 ----------------------------------------
 Attendees: Rahul, Neha
 Decided: move job to 11pm
@@ -269,8 +269,8 @@ def run_tool_loop(messages: list, max_rounds: int = 10) -> tuple[Any, list[tuple
 #    (B) Iterate in Python over each meeting file
 #    (C) For each file, ask model to read + extract + save via tools
 # =============================================================================
-MEETINGS_DIR = "./meetings"
-MINUTES_DIR = "./minutes"
+MEETINGS_DIR = "../data/meetings/transcripts"
+MINUTES_DIR = "../data/meetings/minutes"
 
 # System prompt used for per-file processing.
 # We explicitly tell the model to:
@@ -332,7 +332,7 @@ def main() -> None:
         print(f" - {f}")
 
     if not meeting_files:
-        print("\nNo meeting files found. Add .txt files to ./meetings and rerun.")
+        print("\nNo meeting files found. Add .txt files to ../data/meetings/transcripts and rerun.")
         return
 
     # -------------------------------------------------------------------------
@@ -383,7 +383,7 @@ def main() -> None:
             print("\nModel final message:")
             print(final_msg.content)
 
-    print("\nDone. Check the ./minutes directory for JSON outputs.")
+    print("\nDone. Check the ../data/meetings/minutes directory for JSON outputs.")
 
 
 if __name__ == "__main__":

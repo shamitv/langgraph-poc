@@ -1,0 +1,9 @@
+Reference date: 2026-01-05
+Meeting: Customer Feedback Review
+
+Bullets:
+- Top complaints: slow exports, confusing billing labels.
+- Decision: exports performance is P0 for next sprint.
+- Decision: rename "Usage Units" to "Credits" on invoices.
+- Action: Farhan to open performance investigation ticket today.
+- Action: Design team to propose invoice wording changes by next Thursday.

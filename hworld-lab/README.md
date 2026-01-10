@@ -34,9 +34,10 @@ pip install langchain-openai langchain-core langgraph pydantic
 ├── lab_02_structured_output.py
 ├── lab_03_tool_calling_minutes.py
 ├── lab_04_langchain_to_langgraph.py
-├── tool_prep.py                 # creates ./meetings and ./minutes with sample data
-├── meetings/                    # input .txt notes (created by tool_prep.py)
-└── minutes/                     # output .json minutes (created by tool_prep.py)
+├── tool_prep.py                 # creates data folder with sample data
+└── ../data/meetings/
+    ├── transcripts/             # input .txt notes (created by tool_prep.py)
+    └── minutes/                  # output .json minutes
 ```
 
 
@@ -125,8 +126,8 @@ python tool_prep.py
 ```
 
 This creates:
-- `./meetings/` populated with sample `.txt`
-- `./minutes/` output directory
+- `../data/meetings/transcripts/` populated with sample `.txt`
+- `../data/meetings/minutes/` output directory
 
 ### Run
 ```bash
@@ -136,7 +137,7 @@ python lab_03_tool_calling_minutes.py
 ### Expected result
 - terminal shows meeting files discovered
 - each meeting gets processed
-- minutes saved to `./minutes/*.json`
+- minutes saved to `../data/meetings/minutes/*.json`
 
 ---
 
@@ -190,7 +191,7 @@ python lab_04_langchain_to_langgraph.py
 ## Troubleshooting
 
 ### “No meeting files found”
-- Ensure `./meetings` exists and contains `.txt`
+- Ensure `../data/meetings/transcripts` exists and contains `.txt`
 - Run:
   ```bash
   python tool_prep.py

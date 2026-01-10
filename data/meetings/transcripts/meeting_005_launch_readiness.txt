@@ -1,0 +1,9 @@
+Reference date: 2026-01-05
+Meeting: Launch Readiness - New Billing UI
+
+Notes:
+- Launch date proposed: Jan 20. Marketing says OK; Sales wants Jan 27.
+- Decision: soft launch Jan 20, full launch Jan 27.
+- Action: Priya to finalize press draft by 2026-01-12.
+- Action: Arjun to confirm pricing page copy by 2026-01-14.
+- Action: Dev team to implement feature flag + rollback plan. (Owner not specified)

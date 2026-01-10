@@ -1,0 +1,9 @@
+Reference date: 2026-01-05
+Meeting: Product Roadmap Discussion
+
+Transcript snippets:
+- PM: "We should ship onboarding v2 this sprint."
+- Eng: "Risky unless we drop analytics refactor."
+- Decision: onboarding v2 ships this sprint; analytics refactor moved to next sprint.
+- Action: Aditi to update Jira epics and sprint board today.
+- Action: Mohit to write migration notes for support team (no date mentioned).

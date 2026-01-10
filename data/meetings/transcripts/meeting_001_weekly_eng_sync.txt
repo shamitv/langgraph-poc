@@ -1,0 +1,11 @@
+Reference date: 2026-01-05
+Meeting: Weekly Engineering Sync
+Attendees: Rahul, Neha, SRE Oncall
+
+Notes:
+- API latency spikes after 6pm IST. Might be batch job related?
+- Observed p95 jumps from ~220ms to ~900ms after 18:00.
+- Decided: move nightly job from 6pm to 11pm (IST) starting tomorrow.
+- Rahul to add dashboard panel for p95 + error rate by tomorrow.
+- Neha to check if Redis eviction policy changed in the last deploy.
+- Next sync: Friday.

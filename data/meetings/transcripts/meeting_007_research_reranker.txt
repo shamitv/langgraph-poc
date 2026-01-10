@@ -1,0 +1,8 @@
+Reference date: 2026-01-05
+Meeting: Research Discussion - Retrieval/Reranker
+
+Notes:
+- "Maybe we should try reranker model X" (not finalized)
+- "Let's definitely benchmark on dataset Y first" (agreed)
+- Action: Anjali to run baseline eval on dataset Y by 2026-01-08.
+- "Could also add multilingual tests later" (optional idea)
