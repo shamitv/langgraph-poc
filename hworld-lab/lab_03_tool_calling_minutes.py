@@ -44,6 +44,7 @@ from __future__ import annotations
 
 import json
 import os
+import time
 from pathlib import Path
 from typing import Any
 
@@ -232,13 +233,14 @@ def _call_tool(tool_obj: Any, args: dict) -> Any:
     return tool_obj.run(**args)
 
 
-def run_tool_loop(messages: list, max_rounds: int = 10) -> tuple[Any, list[tuple[str, dict, Any]]]:
+def run_tool_loop(messages: list, max_rounds: int = 10) -> tuple[Any, list[tuple[str, dict, Any]], dict]:
     """
     Run the conversation until the model stops requesting tool calls.
 
     Returns:
       final_ai_message: last AI message (no more tool calls)
       trace: a list of (tool_name, tool_args, tool_result) executed in order
+      stats: dict with timing and token usage info
 
     How it works:
     - Call LLM with current messages.
@@ -247,14 +249,34 @@ def run_tool_loop(messages: list, max_rounds: int = 10) -> tuple[Any, list[tuple
     - Repeat until the AI stops calling tools or max_rounds is reached.
     """
     trace: list[tuple[str, dict, Any]] = []
+    total_input_tokens = 0
+    total_output_tokens = 0
+    total_tokens = 0
+    llm_call_count = 0
+    start_time = time.time()
 
     for _ in range(max_rounds):
         ai_msg = llm.invoke(messages)
         messages.append(ai_msg)
+        llm_call_count += 1
+
+        # Accumulate token usage from each LLM call
+        usage = getattr(ai_msg, "response_metadata", {}).get("token_usage", {})
+        total_input_tokens += usage.get("prompt_tokens", 0)
+        total_output_tokens += usage.get("completion_tokens", 0)
+        total_tokens += usage.get("total_tokens", 0)
 
         tool_calls = getattr(ai_msg, "tool_calls", None) or []
         if not tool_calls:
-            return ai_msg, trace
+            elapsed = time.time() - start_time
+            stats = {
+                "elapsed_time": elapsed,
+                "llm_calls": llm_call_count,
+                "input_tokens": total_input_tokens,
+                "output_tokens": total_output_tokens,
+                "total_tokens": total_tokens,
+            }
+            return ai_msg, trace, stats
 
         # Execute each requested tool call
         for call in tool_calls:
@@ -339,7 +361,14 @@ def main() -> None:
         ),
     ]
 
-    _, list_trace = run_tool_loop(list_messages)
+    _, list_trace, list_stats = run_tool_loop(list_messages)
+
+    # Print stats for listing operation
+    print(f"\n--- LLM Call Stats (listing) ---")
+    print(f"time       : {list_stats['elapsed_time']:.2f}s")
+    print(f"llm calls  : {list_stats['llm_calls']}")
+    print(f"input tok  : {list_stats['input_tokens']}")
+    print(f"total tok  : {list_stats['total_tokens']}")
 
     # Pull file list directly from the tool result (most reliable for labs)
     meeting_files: list[str] = []
@@ -379,7 +408,14 @@ def main() -> None:
             ),
         ]
 
-        final_msg, trace = run_tool_loop(per_file_messages)
+        final_msg, trace, stats = run_tool_loop(per_file_messages)
+
+        # Print LLM call stats for this file
+        print(f"\n--- LLM Call Stats ---")
+        print(f"time       : {stats['elapsed_time']:.2f}s")
+        print(f"llm calls  : {stats['llm_calls']}")
+        print(f"input tok  : {stats['input_tokens']}")
+        print(f"total tok  : {stats['total_tokens']}")
 
         # Show what got saved (from tool trace) for deterministic lab feedback
         saved_paths = [

@@ -41,6 +41,7 @@ Tip
 from __future__ import annotations
 
 import os
+import time
 from pathlib import Path
 from typing import Annotated, TypedDict
 
@@ -141,12 +142,23 @@ def build_messages() -> list[BaseMessage]:
 # ----------------------------
 # 2) LangChain-style call (baseline)
 # ----------------------------
-def run_langchain(llm: ChatOpenAI, messages: list[BaseMessage]) -> str:
+def run_langchain(llm: ChatOpenAI, messages: list[BaseMessage]) -> tuple[str, dict]:
     """
     This is the Lab 1 call pattern: directly invoke the model with messages.
+    Returns: (response_text, stats_dict)
     """
+    start_time = time.time()
     response = llm.invoke(messages)
-    return response.content
+    elapsed = time.time() - start_time
+
+    # Extract token usage
+    usage = getattr(response, "response_metadata", {}).get("token_usage", {})
+    stats = {
+        "elapsed_time": elapsed,
+        "input_tokens": usage.get("prompt_tokens", "N/A"),
+        "total_tokens": usage.get("total_tokens", "N/A"),
+    }
+    return response.content, stats
 
 
 # ----------------------------
@@ -179,19 +191,30 @@ def build_single_node_graph(llm: ChatOpenAI):
     return builder.compile()
 
 
-def run_langgraph(llm: ChatOpenAI, messages: list[BaseMessage]) -> str:
+def run_langgraph(llm: ChatOpenAI, messages: list[BaseMessage]) -> tuple[str, dict]:
     """
-    Run the single-node graph and return the assistant response text.
+    Run the single-node graph and return the assistant response text and stats.
+    Returns: (response_text, stats_dict)
     """
     graph = build_single_node_graph(llm)
 
     # Graph input must match the state schema (GraphState).
+    start_time = time.time()
     result_state: GraphState = graph.invoke({"messages": messages})
+    elapsed = time.time() - start_time
 
     # After the run, result_state["messages"] includes:
     # [SystemMessage, HumanMessage, AIMessage]
     final_msg = result_state["messages"][-1]
-    return getattr(final_msg, "content", str(final_msg))
+
+    # Extract token usage from the final message
+    usage = getattr(final_msg, "response_metadata", {}).get("token_usage", {})
+    stats = {
+        "elapsed_time": elapsed,
+        "input_tokens": usage.get("prompt_tokens", "N/A"),
+        "total_tokens": usage.get("total_tokens", "N/A"),
+    }
+    return getattr(final_msg, "content", str(final_msg)), stats
 
 
 def main() -> None:
@@ -219,8 +242,12 @@ def main() -> None:
     # 3) Run LangChain baseline
     print("\n=== LANGCHAIN (Lab 1 style) ===")
     try:
-        lc_text = run_langchain(llm, messages)
+        lc_text, lc_stats = run_langchain(llm, messages)
         print(lc_text)
+        print(f"\n--- LLM Call Stats ---")
+        print(f"time      : {lc_stats['elapsed_time']:.2f}s")
+        print(f"input tok : {lc_stats['input_tokens']}")
+        print(f"total tok : {lc_stats['total_tokens']}")
     except Exception as e:
         print("ERROR: LangChain call failed.")
         print(f"details: {e}")
@@ -228,8 +255,12 @@ def main() -> None:
     # 4) Run LangGraph single-node
     print("\n=== LANGGRAPH (Single-node graph) ===")
     try:
-        lg_text = run_langgraph(llm, messages)
+        lg_text, lg_stats = run_langgraph(llm, messages)
         print(lg_text)
+        print(f"\n--- LLM Call Stats ---")
+        print(f"time      : {lg_stats['elapsed_time']:.2f}s")
+        print(f"input tok : {lg_stats['input_tokens']}")
+        print(f"total tok : {lg_stats['total_tokens']}")
     except Exception as e:
         print("ERROR: LangGraph run failed.")
         print("Common causes: missing 'langgraph' install, import errors, or endpoint issues.")

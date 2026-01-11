@@ -26,6 +26,7 @@ Reference : https://docs.langchain.com/oss/python/langgraph/workflows-agents
 from __future__ import annotations
 
 import os
+import time
 from pathlib import Path
 
 # Pydantic is used to define the "structured output" schema.
@@ -249,10 +250,18 @@ def main() -> None:
         try:
             # Because we used `with_structured_output(MeetingMinutes)`,
             # LangChain returns an instance of MeetingMinutes (not raw text).
+            start_time = time.time()
             minutes: MeetingMinutes = structured_llm.invoke(messages)
+            elapsed = time.time() - start_time
 
             # Pretty print JSON for easy reading / copy-paste into docs
             print(dump_json(minutes))
+
+            # Print LLM call stats
+            # Note: structured output wraps the response, so we may not have direct access
+            # to response_metadata. We print timing which is always available.
+            print(f"\n--- LLM Call Stats ---")
+            print(f"time      : {elapsed:.2f}s")
 
         except Exception as e:
             # Common causes in a lab:
