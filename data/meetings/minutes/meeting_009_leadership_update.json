@@ -1,0 +1,19 @@
+{
+  "summary": "Decision: No new country expansion in Q1; budget approved for 2 hires. Action: HR to start hiring pipeline (no date); Finance to circulate updated budget by 2026-01-07.",
+  "decisions": [
+    "No new country expansion in Q1",
+    "Budget approved for 2 additional support hires"
+  ],
+  "action_items": [
+    {
+      "task": "HR to start hiring pipeline",
+      "owner": null,
+      "due_date": null
+    },
+    {
+      "task": "Finance to circulate updated budget sheet",
+      "owner": null,
+      "due_date": "2026-01-07"
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "summary": "Decision: Adopt trunk-based development; implement release tags; update contributing guidelines and Q&A schedule.",
+  "decisions": [
+    "Adopt trunk-based development",
+    "Implement release tags",
+    "Update contributing guidelines",
+    "Schedule Q&A session"
+  ],
+  "action_items": [
+    {
+      "task": "Update contributing guidelines",
+      "owner": null,
+      "due_date": "2026-02-12"
+    },
+    {
+      "task": "Schedule Q&A session",
+      "owner": null,
+      "due_date": "2026-02-12"
+    }
+  ]
+}

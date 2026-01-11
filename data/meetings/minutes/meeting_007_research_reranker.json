@@ -1,0 +1,14 @@
+{
+  "summary": "Agreed to benchmark on dataset Y and assign Anjali to run baseline eval by 2026-01-08. Optional multilingual tests proposed but not decided.",
+  "decisions": [
+    "Benchmark on dataset Y",
+    "Anjali to run baseline eval on Y by 2026-01-08"
+  ],
+  "action_items": [
+    {
+      "task": "Run baseline eval on dataset Y",
+      "owner": "Anjali",
+      "due_date": "2026-01-08"
+    }
+  ]
+}

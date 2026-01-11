@@ -1,0 +1,24 @@
+{
+  "summary": "Launch dates set for Jan 20 (soft) and Jan 27 (full), with action items for press draft and pricing copy by specific dates.",
+  "decisions": [
+    "Soft launch Jan 20",
+    "Full launch Jan 27"
+  ],
+  "action_items": [
+    {
+      "task": "Finalize press draft",
+      "owner": "Priya",
+      "due_date": "2026-01-12"
+    },
+    {
+      "task": "Confirm pricing page copy",
+      "owner": "Arjun",
+      "due_date": "2026-01-14"
+    },
+    {
+      "task": "Implement feature flag + rollback plan",
+      "owner": null,
+      "due_date": null
+    }
+  ]
+}

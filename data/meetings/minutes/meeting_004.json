@@ -1,0 +1,27 @@
+{
+  "summary": "Hiring discussion for candidate 2 approved, candidates 1 and 3 rejected. Action items: send rejection emails, coordinate with HR, prepare salary discussion points.",
+  "decisions": [
+    "Move forward with candidate 2 for final round",
+    "Reject candidates 1 and 3",
+    "Send rejection emails",
+    "Coordinate with HR",
+    "Prepare salary discussion points"
+  ],
+  "action_items": [
+    {
+      "task": "Send rejection emails",
+      "owner": "John",
+      "due_date": null
+    },
+    {
+      "task": "Coordinate with HR",
+      "owner": "David",
+      "due_date": null
+    },
+    {
+      "task": "Prepare salary discussion points",
+      "owner": "Amit",
+      "due_date": null
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "summary": "Decision to evaluate AWS and Azure as finalists, plan for POCs, and require quotes and evaluation matrix.",
+  "decisions": [
+    "Final decision on vendors by end of month",
+    "POC environments setup by Alice",
+    "Quotes from AWS and Azure by Alice",
+    "Evaluation matrix by Eve"
+  ],
+  "action_items": [
+    {
+      "task": "Set up POC environments",
+      "owner": "Alice",
+      "due_date": null
+    },
+    {
+      "task": "Get detailed quotes from AWS and Azure",
+      "owner": "Alice",
+      "due_date": null
+    },
+    {
+      "task": "Prepare evaluation matrix",
+      "owner": "Eve",
+      "due_date": null
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "summary": "Security audit discussed SQL injection and XSS vulnerabilities. Actions: fix SQL injection, expedite XSS patches, schedule penetration test, prepare security report.",
+  "decisions": [
+    "SQL injection fixed",
+    "XSS patches in review",
+    "Penetration test scheduled for next month",
+    "Security report to be prepared"
+  ],
+  "action_items": [
+    {
+      "task": "Fix SQL injection",
+      "owner": "David",
+      "due_date": "2026-02-05"
+    },
+    {
+      "task": "Expedite XSS patches",
+      "owner": "Alice",
+      "due_date": null
+    },
+    {
+      "task": "Schedule penetration test",
+      "owner": "Bob",
+      "due_date": "2026-03-05"
+    },
+    {
+      "task": "Prepare security report",
+      "owner": "David",
+      "due_date": null
+    }
+  ]
+}

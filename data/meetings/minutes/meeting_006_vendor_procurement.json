@@ -1,0 +1,18 @@
+{
+  "summary": "Decision: proceed with 1-year contract only (no 2-year). Action: Nitin to request revised quote by Monday. Legal to review DPA and share redlines.",
+  "decisions": [
+    "Decision: proceed with 1-year contract only (no 2-year)."
+  ],
+  "action_items": [
+    {
+      "task": "Request revised quote",
+      "owner": "Nitin",
+      "due_date": "2026-01-05"
+    },
+    {
+      "task": "Review DPA",
+      "owner": null,
+      "due_date": null
+    }
+  ]
+}

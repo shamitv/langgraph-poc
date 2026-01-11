@@ -1,0 +1,25 @@
+{
+  "summary": "Discussion on marketing strategy, target audience, campaign plans, and task assignments.",
+  "decisions": [
+    "Focus on small business owners as primary audience",
+    "Webinar as main launch event",
+    "Email campaign drafts to be created"
+  ],
+  "action_items": [
+    {
+      "task": "Create email campaign drafts",
+      "owner": "John",
+      "due_date": null
+    },
+    {
+      "task": "Schedule webinar date",
+      "owner": "Bob",
+      "due_date": null
+    },
+    {
+      "task": "Prepare social media content",
+      "owner": "Priya",
+      "due_date": null
+    }
+  ]
+}
