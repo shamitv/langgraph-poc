@@ -46,7 +46,7 @@ import json
 import os
 import time
 from pathlib import Path
-from typing import Any
+from typing import Any, Literal
 
 from pydantic import BaseModel, Field
 from dotenv import load_dotenv
@@ -64,6 +64,36 @@ if _env_path.exists():
 # =============================================================================
 # 1) Structured output schema we want to SAVE (Pydantic)
 # =============================================================================
+
+# Categories for classifying meeting types
+MEETING_CATEGORIES = [
+    "engineering_sync",      # Regular engineering/tech team sync
+    "product_roadmap",       # Product planning and roadmap discussions
+    "incident_postmortem",   # Post-incident reviews and RCAs
+    "hiring",                # Interview debriefs and hiring discussions
+    "launch_readiness",      # Product/feature launch planning
+    "vendor_procurement",    # Vendor calls and procurement discussions
+    "research",              # Research and experimentation discussions
+    "customer_feedback",     # Customer feedback and support reviews
+    "leadership",            # Leadership updates and strategy
+    "other",                 # General/uncategorized meetings
+]
+
+# Type alias for category (Pydantic will validate against this)
+MeetingCategory = Literal[
+    "engineering_sync",
+    "product_roadmap",
+    "incident_postmortem",
+    "hiring",
+    "launch_readiness",
+    "vendor_procurement",
+    "research",
+    "customer_feedback",
+    "leadership",
+    "other",
+]
+
+
 class ActionItem(BaseModel):
     task: str
     owner: str | None = None
@@ -71,6 +101,7 @@ class ActionItem(BaseModel):
 
 
 class MeetingMinutes(BaseModel):
+    category: MeetingCategory     # Type of meeting
     summary: str
     decisions: list[str] = Field(default_factory=list)
     action_items: list[ActionItem] = Field(default_factory=list)
@@ -328,6 +359,7 @@ You MUST use tools when appropriate:
 {minutes_schema_for_prompt()}
 
 Rules for minutes:
+- category: classify into one of: """ + ', '.join(MEETING_CATEGORIES) + """
 - summary: brief, 1-3 sentences
 - decisions: include only firm decisions
 - action_items: concrete tasks; set owner/due_date to null if missing
