@@ -41,6 +41,7 @@ from langchain_openai import ChatOpenAI
 # in a structured way, similar to OpenAI "roles".
 from langchain_core.messages import SystemMessage, HumanMessage
 from dotenv import load_dotenv
+from typing import Literal
 
 # Load .env from project root
 _env_path = Path(__file__).parent.parent / ".env"
@@ -51,6 +52,36 @@ if _env_path.exists():
 # ----------------------------
 # 1) Define output schema (Pydantic models)
 # ----------------------------
+
+# Categories for classifying meeting types
+MEETING_CATEGORIES = [
+    "engineering_sync",      # Regular engineering/tech team sync
+    "product_roadmap",       # Product planning and roadmap discussions
+    "incident_postmortem",   # Post-incident reviews and RCAs
+    "hiring",                # Interview debriefs and hiring discussions
+    "launch_readiness",      # Product/feature launch planning
+    "vendor_procurement",    # Vendor calls and procurement discussions
+    "research",              # Research and experimentation discussions
+    "customer_feedback",     # Customer feedback and support reviews
+    "leadership",            # Leadership updates and strategy
+    "other",                 # General/uncategorized meetings
+]
+
+# Type alias for category (Pydantic will validate against this)
+MeetingCategory = Literal[
+    "engineering_sync",
+    "product_roadmap",
+    "incident_postmortem",
+    "hiring",
+    "launch_readiness",
+    "vendor_procurement",
+    "research",
+    "customer_feedback",
+    "leadership",
+    "other",
+]
+
+
 class ActionItem(BaseModel):
     """
     One action item extracted from the notes.
@@ -65,6 +96,7 @@ class MeetingMinutes(BaseModel):
     Full structured output for meeting minutes.
     This is the top-level schema we want the LLM to return.
     """
+    category: MeetingCategory     # Type of meeting
     summary: str
     decisions: list[str] = Field(default_factory=list)
     action_items: list[ActionItem] = Field(default_factory=list)
@@ -129,6 +161,7 @@ structured_llm = local_llm.with_structured_output(MeetingMinutes, include_raw=Tr
 SYSTEM_INSTRUCTIONS = (
     "You convert meeting notes into structured minutes.\n"
     "Rules:\n"
+    f"- Classify the meeting into one of these categories: {', '.join(MEETING_CATEGORIES)}\n"
     "- Put only firm decisions in decisions.\n"
     "- Action items must be concrete tasks.\n"
     "- If owner or due date is missing, output null.\n"
