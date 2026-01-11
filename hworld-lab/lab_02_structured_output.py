@@ -25,6 +25,9 @@ Reference : https://docs.langchain.com/oss/python/langgraph/workflows-agents
 
 from __future__ import annotations
 
+import os
+from pathlib import Path
+
 # Pydantic is used to define the "structured output" schema.
 # The model output will be parsed/validated into these classes.
 from pydantic import BaseModel, Field
@@ -36,6 +39,12 @@ from langchain_openai import ChatOpenAI
 # These message classes let you send a system instruction + a user prompt,
 # in a structured way, similar to OpenAI "roles".
 from langchain_core.messages import SystemMessage, HumanMessage
+from dotenv import load_dotenv
+
+# Load .env from project root
+_env_path = Path(__file__).parent.parent / ".env"
+if _env_path.exists():
+    load_dotenv(_env_path)
 
 
 # ----------------------------
@@ -63,15 +72,21 @@ class MeetingMinutes(BaseModel):
 # ----------------------------
 # 2) Configure the LLM client (OpenAI-compatible local endpoint)
 # ----------------------------
+# Read configuration from environment (keeps the lab flexible)
+_model = os.getenv("MODEL", "Ministral-3B-Instruct")
+_base_url = os.getenv("BASE_URL", "http://localhost:8090/v1")
+_api_key = os.getenv("API_KEY", "NONE")
+
+print("\n=== LLM CONNECTION DETAILS ===")
+print(f"model     : {_model}")
+print(f"base_url  : {_base_url}")
+print(f"api_key   : {'***' if _api_key else 'NOT SET'}")
+print()
+
 local_llm = ChatOpenAI(
-    # Name must match what your local server understands
-    model="Ministral-3B-Instruct",           # Replace with your desired model
-
-    # IMPORTANT: This points to your local OpenAI-compatible server
-    base_url="http://localhost:8090/v1",     # Replace with your custom URL
-
-    # Many local servers accept any string as the key; OpenAI requires a real key.
-    api_key="NONE",
+    model=_model,
+    base_url=_base_url,
+    api_key=_api_key,
 )
 
 

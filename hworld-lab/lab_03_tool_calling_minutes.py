@@ -43,14 +43,21 @@ Notes / Troubleshooting
 from __future__ import annotations
 
 import json
+import os
 from pathlib import Path
 from typing import Any
 
 from pydantic import BaseModel, Field
+from dotenv import load_dotenv
 
 from langchain_openai import ChatOpenAI
 from langchain_core.messages import SystemMessage, HumanMessage, ToolMessage
 from langchain_core.tools import tool
+
+# Load .env from project root
+_env_path = Path(__file__).parent.parent / ".env"
+if _env_path.exists():
+    load_dotenv(_env_path)
 
 
 # =============================================================================
@@ -189,10 +196,21 @@ TOOLS_BY_NAME = {t.name: t for t in TOOLS}  # Used by our tool-loop executor
 # =============================================================================
 # 3) LLM configuration (OpenAI-compatible)
 # =============================================================================
+# Read configuration from environment (keeps the lab flexible)
+_model = os.getenv("MODEL", "Ministral-3B-Instruct")
+_base_url = os.getenv("BASE_URL", "http://localhost:8090/v1")
+_api_key = os.getenv("API_KEY", "NONE")
+
+print("\n=== LLM CONNECTION DETAILS ===")
+print(f"model     : {_model}")
+print(f"base_url  : {_base_url}")
+print(f"api_key   : {'***' if _api_key else 'NOT SET'}")
+print()
+
 llm = ChatOpenAI(
-    model="Ministral-3B-Instruct",         # change if your local server uses a different name
-    base_url="http://localhost:8090/v1",   # your OpenAI-compatible endpoint
-    api_key="NONE",                        # local servers often accept any string
+    model=_model,
+    base_url=_base_url,
+    api_key=_api_key,
     temperature=0,
     timeout=120,
 ).bind_tools(TOOLS)  # <-- This enables tool calling: the model can request tool executions

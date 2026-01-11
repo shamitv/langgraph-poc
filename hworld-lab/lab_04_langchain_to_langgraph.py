@@ -41,10 +41,12 @@ Tip
 from __future__ import annotations
 
 import os
+from pathlib import Path
 from typing import Annotated, TypedDict
 
 from langchain_openai import ChatOpenAI
 from langchain_core.messages import BaseMessage, HumanMessage, SystemMessage
+from dotenv import load_dotenv
 
 # LangGraph imports:
 # - StateGraph builds a directed graph around a typed state object
@@ -54,6 +56,11 @@ from langgraph.graph import END, StateGraph
 # add_messages is a reducer: it appends new messages returned by a node
 # into the state's message list (rather than replacing it).
 from langgraph.graph.message import add_messages
+
+# Load .env from project root
+_env_path = Path(__file__).parent.parent / ".env"
+if _env_path.exists():
+    load_dotenv(_env_path)
 
 
 # ----------------------------
@@ -188,21 +195,25 @@ def run_langgraph(llm: ChatOpenAI, messages: list[BaseMessage]) -> str:
 
 
 def main() -> None:
-    # 1) Read config and create LLM client
+    # 1) Read config
     model, base_url, api_key, temperature = read_config()
+
+    # Print connection details BEFORE creating the LLM client
+    print("\n=== LLM CONNECTION DETAILS ===")
+    print(f"model     : {model}")
+    print(f"base_url  : {base_url if base_url else '(default)'}")
+    print(f"api_key   : {'***' if api_key else 'NOT SET'}")
+    print(f"temp      : {temperature}")
+    print()
+
+    # 2) Create LLM client
     llm = make_llm(model=model, base_url=base_url, api_key=api_key, temperature=temperature)
 
-    # 2) Build prompts/messages (same as Lab 1)
+    # 3) Build prompts/messages (same as Lab 1)
     messages = build_messages()
     user_prompt = messages[-1].content  # last message is the HumanMessage
 
-    print("\n=== CONFIG ===")
-    print(f"model     : {model}")
-    print(f"base_url  : {base_url if base_url else '(default)'}")
-    print(f"temp      : {temperature}")
-    # We intentionally do NOT print api_key for security
-
-    print("\n=== PROMPT ===")
+    print("=== PROMPT ===")
     print(user_prompt)
 
     # 3) Run LangChain baseline
