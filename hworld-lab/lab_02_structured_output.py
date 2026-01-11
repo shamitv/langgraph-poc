@@ -118,7 +118,9 @@ def dump_json(obj: BaseModel) -> str:
 # - Tell the model about the schema (often via tool-calling / JSON schema)
 # - Parse the model response into the Pydantic class
 # - Validate fields & types (task must be str, etc.)
-structured_llm = local_llm.with_structured_output(MeetingMinutes)
+#
+# Using include_raw=True gives us access to the raw AIMessage with token usage.
+structured_llm = local_llm.with_structured_output(MeetingMinutes, include_raw=True)
 
 
 # ----------------------------
@@ -248,20 +250,29 @@ def main() -> None:
         ]
 
         try:
-            # Because we used `with_structured_output(MeetingMinutes)`,
-            # LangChain returns an instance of MeetingMinutes (not raw text).
+            # Because we used `with_structured_output(MeetingMinutes, include_raw=True)`,
+            # LangChain returns a dict with 'parsed' and 'raw' keys.
             start_time = time.time()
-            minutes: MeetingMinutes = structured_llm.invoke(messages)
+            result = structured_llm.invoke(messages)
             elapsed = time.time() - start_time
+
+            # Extract the parsed MeetingMinutes and raw AIMessage
+            minutes: MeetingMinutes = result["parsed"]
+            raw_msg = result.get("raw")
 
             # Pretty print JSON for easy reading / copy-paste into docs
             print(dump_json(minutes))
 
+            # Extract token usage from raw response
+            usage = getattr(raw_msg, "response_metadata", {}).get("token_usage", {}) if raw_msg else {}
+            input_tokens = usage.get("prompt_tokens", "N/A")
+            total_tokens = usage.get("total_tokens", "N/A")
+
             # Print LLM call stats
-            # Note: structured output wraps the response, so we may not have direct access
-            # to response_metadata. We print timing which is always available.
             print(f"\n--- LLM Call Stats ---")
             print(f"time      : {elapsed:.2f}s")
+            print(f"input tok : {input_tokens}")
+            print(f"total tok : {total_tokens}")
 
         except Exception as e:
             # Common causes in a lab:
