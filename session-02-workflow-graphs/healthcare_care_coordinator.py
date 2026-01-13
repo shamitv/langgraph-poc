@@ -421,25 +421,49 @@ def coverage_check(insurance_plan: str, service: str) -> str:
     return json.dumps({"insurance_plan": plan, "service": service, **matrix[plan].get(key, {})}, indent=2)
 
 
-def load_policy_documents(policies_dir: Path) -> str:
+def load_policy_readme(policies_dir: Path) -> str:
     """
-    Load all policy markdown files from the policies directory.
-    Returns concatenated policy content for LLM interpretation.
+    Load the README.md policy index file.
+    Returns the README content for policy selection.
+    """
+    readme_path = policies_dir / "README.md"
+    if not readme_path.exists():
+        return "(No policy index found)"
+    try:
+        return readme_path.read_text(encoding="utf-8")
+    except Exception as e:
+        return f"(Error loading policy index: {e})"
+
+
+def load_specific_policies(policies_dir: Path, policy_files: list[str]) -> str:
+    """
+    Load specific policy files by name.
+    Args:
+        policies_dir: Path to policies directory
+        policy_files: List of policy file basenames (e.g., ['controlled_substances', 'imaging_services'])
+    Returns concatenated policy content for evaluation.
     """
     if not policies_dir.exists():
-        return "(No policy documents found)"
+        return "(Policies directory not found)"
 
     policy_content = []
-    for policy_file in sorted(policies_dir.glob("*.md")):
-        if policy_file.name == "README.md":
-            continue  # Skip index file
-        try:
-            content = policy_file.read_text(encoding="utf-8")
-            policy_content.append(f"--- {policy_file.stem.upper()} ---\n{content}")
-        except Exception as e:
-            policy_content.append(f"--- {policy_file.stem.upper()} ---\n(Error loading: {e})")
+    for policy_name in policy_files:
+        # Normalize name: remove .md if present, handle various formats
+        clean_name = policy_name.strip().lower().replace(" ", "_")
+        if clean_name.endswith(".md"):
+            clean_name = clean_name[:-3]
 
-    return "\n\n".join(policy_content) if policy_content else "(No policy documents found)"
+        policy_file = policies_dir / f"{clean_name}.md"
+        if policy_file.exists():
+            try:
+                content = policy_file.read_text(encoding="utf-8")
+                policy_content.append(f"--- {clean_name.upper()} ---\n{content}")
+            except Exception as e:
+                policy_content.append(f"--- {clean_name.upper()} ---\n(Error loading: {e})")
+        else:
+            policy_content.append(f"--- {clean_name.upper()} ---\n(Policy file not found)")
+
+    return "\n\n".join(policy_content) if policy_content else "(No policies loaded)"
 
 
 # Create a dedicated LLM for policy checking (no tools bound)
@@ -462,22 +486,71 @@ def initialize_policy_llm():
 def policy_check(request_type: str, details: str) -> str:
     """
     Check proposed appointments/medications/services against healthcare policy criteria.
-    Loads policy documentation from the policies/ directory and uses LLM to interpret
-    rules in context. Returns structured JSON with status (PASS/REQUIRES_REVIEW/BLOCKED),
+    Uses a two-phase approach:
+      Phase 1: Load README to identify which policies are relevant to this request
+      Phase 2: Load only the relevant policies and evaluate against them
+    Returns structured JSON with status (PASS/REQUIRES_REVIEW/BLOCKED),
     violations, warnings, and requirements.
     """
     global policy_llm
     if policy_llm is None:
         initialize_policy_llm()
 
-    # Load policy documents
     policies_dir = Path(__file__).parent / "policies"
-    policy_content = load_policy_documents(policies_dir)
 
-    # Build prompt for LLM policy evaluation
-    policy_prompt = f"""You are a healthcare policy compliance checker. Your job is to evaluate requests against organizational policies.
+    # ===== PHASE 1: Identify relevant policies from README =====
+    readme_content = load_policy_readme(policies_dir)
 
-## POLICIES (evaluate ALL applicable policies):
+    selection_prompt = f"""You are a healthcare policy routing assistant. Your job is to identify which policy documents are relevant to a given request.
+
+## POLICY INDEX (README):
+
+{readme_content}
+
+## REQUEST TO ANALYZE:
+- Request Type: {request_type}
+- Details: {details}
+
+## INSTRUCTIONS:
+Based on the policy index above, identify which policy files are relevant to this request.
+Consider the request type and details carefully. Select ALL policies that might apply.
+
+## REQUIRED OUTPUT FORMAT:
+Return ONLY a JSON array of policy file basenames (without .md extension). Example:
+["controlled_substances", "visit_type_restrictions"]
+
+If no policies seem relevant, return: ["visit_type_restrictions"]
+"""
+
+    call_id = llm_logger.log_request("policy_check_phase1_selection", [SystemMessage(content=selection_prompt)])
+
+    try:
+        selection_response = policy_llm.invoke([SystemMessage(content=selection_prompt)])
+        llm_logger.log_response(call_id, selection_response)
+
+        # Parse selected policies
+        selection_content = selection_response.content or ""
+        # Remove thinking blocks if present
+        selection_content = re.sub(r"<think>.*?</think>", "", selection_content, flags=re.DOTALL)
+        selection_content = re.sub(r"```json\s*", "", selection_content)
+        selection_content = re.sub(r"```\s*", "", selection_content)
+        selection_content = selection_content.strip()
+
+        selected_policies = json.loads(selection_content)
+        if not isinstance(selected_policies, list):
+            selected_policies = ["visit_type_restrictions"]  # Fallback
+
+    except (json.JSONDecodeError, Exception) as e:
+        # Fallback: load common policies if selection fails
+        selected_policies = ["controlled_substances", "imaging_services", "visit_type_restrictions"]
+        print(f"[policy_check] Phase 1 selection failed ({e}), using fallback policies")
+
+    # ===== PHASE 2: Load selected policies and evaluate =====
+    policy_content = load_specific_policies(policies_dir, selected_policies)
+
+    evaluation_prompt = f"""You are a healthcare policy compliance checker. Your job is to evaluate requests against organizational policies.
+
+## APPLICABLE POLICIES:
 
 {policy_content}
 
@@ -486,10 +559,9 @@ def policy_check(request_type: str, details: str) -> str:
 - Details: {details}
 
 ## INSTRUCTIONS:
-1. Read ALL policy documents above carefully
-2. Identify which policies apply to this request
-3. Evaluate the request against each applicable rule
-4. Determine the overall status:
+1. Read the policy documents above carefully
+2. Evaluate the request against each applicable rule
+3. Determine the overall status:
    - BLOCKED: If ANY rule violation is found
    - REQUIRES_REVIEW: If there are warnings or requirements but no violations
    - PASS: If no issues found
@@ -506,21 +578,27 @@ Return ONLY valid JSON (no markdown, no explanation). Use this exact structure:
 }}
 """
 
-    call_id = llm_logger.log_request("policy_check", [SystemMessage(content=policy_prompt)])
+    call_id = llm_logger.log_request("policy_check_phase2_evaluation", [SystemMessage(content=evaluation_prompt)])
 
     try:
-        response = policy_llm.invoke([SystemMessage(content=policy_prompt)])
+        response = policy_llm.invoke([SystemMessage(content=evaluation_prompt)])
         llm_logger.log_response(call_id, response)
 
         # Extract JSON from response
         content = response.content or ""
-        # Remove any markdown code blocks if present
+        # Remove thinking blocks and markdown code blocks if present
+        content = re.sub(r"<think>.*?</think>", "", content, flags=re.DOTALL)
         content = re.sub(r"```json\s*", "", content)
         content = re.sub(r"```\s*", "", content)
         content = content.strip()
 
         # Validate it's valid JSON
         parsed = json.loads(content)
+        # Add metadata about the two-phase process
+        parsed["_selection_phase"] = {
+            "policies_selected": selected_policies,
+            "selection_method": "llm_readme_analysis"
+        }
         return json.dumps(parsed, indent=2)
 
     except json.JSONDecodeError as e:
@@ -801,7 +879,7 @@ if __name__ == "__main__":
             "messages": [HumanMessage(content=sample_query)],
             "next": "triage_nurse",
         },
-        config={"recursion_limit": 50}
+        config={"recursion_limit": 150}
     )
 
     print("\n" + "=" * 80)

@@ -4,10 +4,20 @@ This directory contains policy documents that the healthcare care coordination a
 
 ## How It Works
 
-Instead of hardcoded if/else logic, the agent:
-1. Loads these policy documents
+Instead of hardcoded if/else logic, the agent uses a **two-phase policy evaluation**:
+
+### Phase 1: Policy Selection
+1. Loads this README.md (policy index)
+2. Asks LLM to identify which policies are relevant to the request
+3. Returns a list of applicable policy file names
+
+### Phase 2: Policy Evaluation
+1. Loads only the selected policy documents
 2. Passes them to the LLM along with the request
 3. LLM interprets policies and returns a compliance decision
+
+This approach reduces token usage and improves focus by only loading relevant policies.
+
 
 ## Available Policies
 
