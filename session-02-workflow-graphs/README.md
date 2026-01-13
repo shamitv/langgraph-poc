@@ -338,8 +338,9 @@ flowchart LR
 3. Update triage nurse's system prompt
 
 ### Modify Policy Rules
-- Edit the `policy_check` function
-- Add new violation/warning conditions
+- Edit files in the `policies/` directory
+- Add new rules, conditions, or entire policy documents
+- Changes take effect immediately (no code changes needed)
 
 ### Change Routing Logic
 - Modify the `supervisor` node's decision logic
