@@ -421,73 +421,129 @@ def coverage_check(insurance_plan: str, service: str) -> str:
     return json.dumps({"insurance_plan": plan, "service": service, **matrix[plan].get(key, {})}, indent=2)
 
 
+def load_policy_documents(policies_dir: Path) -> str:
+    """
+    Load all policy markdown files from the policies directory.
+    Returns concatenated policy content for LLM interpretation.
+    """
+    if not policies_dir.exists():
+        return "(No policy documents found)"
+
+    policy_content = []
+    for policy_file in sorted(policies_dir.glob("*.md")):
+        if policy_file.name == "README.md":
+            continue  # Skip index file
+        try:
+            content = policy_file.read_text(encoding="utf-8")
+            policy_content.append(f"--- {policy_file.stem.upper()} ---\n{content}")
+        except Exception as e:
+            policy_content.append(f"--- {policy_file.stem.upper()} ---\n(Error loading: {e})")
+
+    return "\n\n".join(policy_content) if policy_content else "(No policy documents found)"
+
+
+# Create a dedicated LLM for policy checking (no tools bound)
+policy_llm = None  # Will be initialized after main llm is created
+
+
+def initialize_policy_llm():
+    """Initialize the policy LLM after main LLM setup."""
+    global policy_llm
+    policy_llm = ChatOpenAI(
+        model=model_id,
+        temperature=0,
+        base_url=llm_url,
+        api_key=os.getenv("OPENAI_API_KEY", "NONE"),
+        http_client=logging_http_client,
+    )
+
+
 @tool("policy_check")
 def policy_check(request_type: str, details: str) -> str:
     """
-    Check proposed appointments/medications/services against policy criteria.
-    Example policy constraints (mock):
-      - Controlled substances (e.g., oxycodone) not eligible for telehealth initiation/refill.
-      - Antibiotics require clinician evaluation; no direct OTC-style dispensing.
-      - Imaging (MRI) requires prior authorization and clinical indications; often after in-person assessment.
-      - Minors require guardian consent for scheduling and certain care pathways.
+    Check proposed appointments/medications/services against healthcare policy criteria.
+    Loads policy documentation from the policies/ directory and uses LLM to interpret
+    rules in context. Returns structured JSON with status (PASS/REQUIRES_REVIEW/BLOCKED),
+    violations, warnings, and requirements.
     """
-    rt = request_type.strip().lower()
-    d = details.lower()
+    global policy_llm
+    if policy_llm is None:
+        initialize_policy_llm()
 
-    violations = []
-    warnings = []
-    requirements = []
+    # Load policy documents
+    policies_dir = Path(__file__).parent / "policies"
+    policy_content = load_policy_documents(policies_dir)
 
-    # Controlled substances
-    if "oxycodone" in d or "opioid" in d or "controlled" in d:
-        violations.append("Controlled substance request: not allowed via telehealth; in-person evaluation required.")
-        requirements.append("Verify identity + controlled-substance protocol; require clinician assessment.")
+    # Build prompt for LLM policy evaluation
+    policy_prompt = f"""You are a healthcare policy compliance checker. Your job is to evaluate requests against organizational policies.
 
-    # Antibiotics / allergy
-    if "amoxicillin" in d or "antibiotic" in d:
-        warnings.append("Antibiotics generally require clinician assessment; avoid prescribing without evaluation.")
-        if "penicillin" in d:
-            violations.append("Potential penicillin allergy conflict; alternative must be assessed by clinician.")
+## POLICIES (evaluate ALL applicable policies):
 
-    # Imaging / MRI
-    if "mri" in d:
-        requirements.append("Prior authorization required for MRI under most plans.")
-        warnings.append("MRI typically scheduled after clinical evaluation unless red-flag criteria met.")
+{policy_content}
 
-    # Minors
-    if "age: 16" in d or "minor" in d:
-        requirements.append("Guardian consent required for scheduling and communications.")
+## REQUEST TO EVALUATE:
+- Request Type: {request_type}
+- Details: {details}
 
-    # Visit type restrictions
-    if "telehealth" in d and ("controlled substance" in " ".join(violations).lower()):
-        violations.append("Telehealth visit type not permitted for this request.")
+## INSTRUCTIONS:
+1. Read ALL policy documents above carefully
+2. Identify which policies apply to this request
+3. Evaluate the request against each applicable rule
+4. Determine the overall status:
+   - BLOCKED: If ANY rule violation is found
+   - REQUIRES_REVIEW: If there are warnings or requirements but no violations
+   - PASS: If no issues found
 
-    # Build response
-    if violations:
-        return json.dumps(
-            {
-                "request_type": rt,
-                "status": "BLOCKED",
-                "violations": violations,
-                "warnings": warnings,
-                "requirements": requirements,
-            },
-            indent=2,
-        )
+## REQUIRED OUTPUT FORMAT:
+Return ONLY valid JSON (no markdown, no explanation). Use this exact structure:
+{{
+    "request_type": "{request_type}",
+    "status": "PASS" | "REQUIRES_REVIEW" | "BLOCKED",
+    "violations": ["list of violation messages"],
+    "warnings": ["list of warning messages"],
+    "requirements": ["list of required actions"],
+    "policies_applied": ["list of policy IDs evaluated"]
+}}
+"""
 
-    if warnings or requirements:
-        return json.dumps(
-            {
-                "request_type": rt,
-                "status": "REQUIRES_REVIEW",
-                "violations": [],
-                "warnings": warnings,
-                "requirements": requirements,
-            },
-            indent=2,
-        )
+    call_id = llm_logger.log_request("policy_check", [SystemMessage(content=policy_prompt)])
 
-    return json.dumps({"request_type": rt, "status": "PASS", "violations": [], "warnings": [], "requirements": []}, indent=2)
+    try:
+        response = policy_llm.invoke([SystemMessage(content=policy_prompt)])
+        llm_logger.log_response(call_id, response)
+
+        # Extract JSON from response
+        content = response.content or ""
+        # Remove any markdown code blocks if present
+        content = re.sub(r"```json\s*", "", content)
+        content = re.sub(r"```\s*", "", content)
+        content = content.strip()
+
+        # Validate it's valid JSON
+        parsed = json.loads(content)
+        return json.dumps(parsed, indent=2)
+
+    except json.JSONDecodeError as e:
+        # Fallback if LLM returns invalid JSON
+        return json.dumps({
+            "request_type": request_type,
+            "status": "REQUIRES_REVIEW",
+            "violations": [],
+            "warnings": [f"Policy check returned non-standard response: {str(e)[:100]}"],
+            "requirements": ["Manual policy review recommended"],
+            "policies_applied": [],
+            "raw_response": content[:500] if 'content' in dir() else "N/A"
+        }, indent=2)
+    except Exception as e:
+        # Fallback for any other errors
+        return json.dumps({
+            "request_type": request_type,
+            "status": "REQUIRES_REVIEW",
+            "violations": [],
+            "warnings": [f"Policy check error: {type(e).__name__}"],
+            "requirements": ["Manual policy review recommended"],
+            "policies_applied": []
+        }, indent=2)
 
 
 tools = [patient_record, appointment_slots, medication_info, coverage_check, policy_check]

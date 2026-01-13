@@ -278,6 +278,44 @@ The system will:
 
 ---
 
+## Policy Architecture (LLM-Driven)
+
+The policy engine uses a **documentation-driven approach** where business rules are defined in markdown files instead of hardcoded logic.
+
+### How It Works
+
+```mermaid
+flowchart LR
+    A["policy_check()"] --> B["Load policies/*.md"]
+    B --> C["Send to LLM with request"]
+    C --> D["LLM interprets rules"]
+    D --> E["Return structured JSON"]
+```
+
+1. **Policy documents** in `policies/` define rules in human-readable markdown
+2. **At runtime**, the `policy_check` tool loads all policy files
+3. **LLM interprets** the policies in context of the specific request
+4. **Structured output** returns PASS/REQUIRES_REVIEW/BLOCKED with details
+
+### Policy Files
+
+| File | Description |
+|------|-------------|
+| `controlled_substances.md` | Opioids, Schedule II-V drug restrictions |
+| `medication_prescribing.md` | Antibiotics, allergy conflict checks |
+| `imaging_services.md` | MRI/CT prior authorization requirements |
+| `patient_consent.md` | Minor consent, guardian requirements |
+| `visit_type_restrictions.md` | Telehealth vs in-person rules |
+
+### Benefits
+
+- **No code changes** to update policies — just edit markdown
+- **Audit trail** via Git history of policy changes
+- **Business analyst friendly** — policies are human-readable
+- **Contextual interpretation** — LLM understands nuance beyond keyword matching
+
+---
+
 ## Key Concepts Demonstrated
 
 | Concept | Implementation |
