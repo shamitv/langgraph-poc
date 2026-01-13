@@ -25,13 +25,20 @@ from langchain_core.tools import tool
 from langgraph.graph import StateGraph, END
 from langgraph.graph.message import add_messages
 from langgraph.prebuilt import ToolNode
+from pathlib import Path
+from dotenv import load_dotenv
+
+# Load .env from project root
+_env_path = Path(__file__).parent.parent / ".env"
+if _env_path.exists():
+    load_dotenv(_env_path)
 
 
 # ----------------------------
 # Config
 # ----------------------------
 llm_type = "vllm"  # e.g., "llama.cpp", "vllm", "qwen3", etc.
-llm_url = os.getenv("OPENAI_BASE_URL", "http://localhost:8090/v1")  # OpenAI-compatible base URL
+llm_url = os.getenv("OPENAI_BASE_URL", "http://localhost:8070/v1")  # OpenAI-compatible base URL
 model_id = os.getenv("OPENAI_MODEL", "Qwen3-1.7B")                  # server model name/id
 
 
