@@ -112,27 +112,60 @@ specialties.
 
 ---
 
-### Step 3: Tools Execute (Including Nested LLM Call)
+### Step 3: Tools Execute — Two-Phase Policy Loading
 
 | Field | Value |
 |-------|-------|
-| **LLM Call** | #3 |
+| **LLM Call** | #3-4 |
 | **Caller** | `policy_check` (tool) |
-| **Timestamp** | 22:58:53 |
+| **Timestamp** | 23:15:10 |
 
-The `policy_check` tool is special — it uses an LLM to interpret policy documents dynamically. This is the nested LLM call.
+The `policy_check` tool uses a **two-phase approach** to efficiently load only relevant policies:
 
-**Policy Check Prompt (excerpt):**
+#### Phase 1: Policy Selection (LLM Call #3)
+
+First, the tool loads the README.md (policy index) and asks the LLM to identify which policies are relevant to the request.
+
+**Selection Prompt (excerpt):**
 ```
-You are a healthcare policy compliance checker. Your job is to evaluate requests 
-against organizational policies.
+You are a healthcare policy routing assistant. Your job is to identify which 
+policy documents are relevant to a given request.
 
-## POLICIES (evaluate ALL applicable policies):
---- CONTROLLED_SUBSTANCES ---
-[Policy content about opioid prescriptions requiring in-person visits...]
+## POLICY INDEX (README):
+| Policy | File | Description |
+|--------|------|-------------|
+| Controlled Substances | controlled_substances.md | Opioids, Schedule II-V drugs |
+| Imaging Services | imaging_services.md | MRI, CT, prior authorization |
+| Visit Type Restrictions | visit_type_restrictions.md | Telehealth vs in-person |
+...
 
+## REQUEST TO ANALYZE:
+- Request Type: appointment
+- Details: refill for oxycodone and MRI
+
+## REQUIRED OUTPUT FORMAT:
+Return ONLY a JSON array of policy file basenames. Example:
+["controlled_substances", "visit_type_restrictions"]
+```
+
+**Selection Response:**
+```json
+["imaging_services"]
+```
+
+> **Observation:** The LLM identified that for an MRI request, only the `imaging_services` policy is relevant. This reduces token usage by not loading all 5 policies.
+
+#### Phase 2: Policy Evaluation (LLM Call #4)
+
+With only the selected policies loaded, the tool evaluates the request:
+
+**Evaluation Prompt (excerpt):**
+```
+You are a healthcare policy compliance checker.
+
+## APPLICABLE POLICIES:
 --- IMAGING_SERVICES ---
-[Policy content about MRI requiring prior authorization...]
+[Full content of imaging_services.md only]
 
 ## REQUEST TO EVALUATE:
 - Request Type: appointment
@@ -144,16 +177,26 @@ against organizational policies.
 {
   "request_type": "appointment",
   "status": "REQUIRES_REVIEW",
-  "violations": [],
-  "warnings": [
-    "MRI imaging may require prior authorization under most insurance plans"
+  "violations": [
+    "No clinical indication documented",
+    "No prior authorization submitted"
   ],
+  "warnings": [],
   "requirements": [
-    "Verify coverage before scheduling"
+    "Submit prior authorization before scheduling",
+    "Document clinical indication",
+    "Check contrast allergy status"
   ],
-  "policies_applied": ["POL-CS-001", "POL-IMG-001"]
+  "policies_applied": ["POL-IMG-001"],
+  "_selection_phase": {
+    "policies_selected": ["imaging_services"],
+    "selection_method": "llm_readme_analysis"
+  }
 }
 ```
+
+> **Key Improvement:** The response now includes `_selection_phase` metadata showing which policies were selected and how. This enables debugging and transparency.
+
 
 ---
 
@@ -288,15 +331,19 @@ shortness of breath, or worsening pain).
 
 ## Summary: Graph Traversal Count
 
+### Latest Run (with Two-Phase Policy Loading)
+
 | Node | Visits | LLM Calls |
 |------|--------|-----------|
-| `supervisor` | 5 | 5 (routing decisions) |
-| `triage_nurse` | 4 | 4 (+ triggers tool calls) |
-| `tools` | 4 | 3 (`policy_check` has nested LLM) |
+| `supervisor` | 3 | 3 (routing decisions) |
+| `triage_nurse` | 2 | 2 (+ triggers tool calls) |
+| `tools` | 2 | 2 (`policy_check` uses 2 calls: selection + evaluation) |
 | `care_coordinator` | 1 | 1 (final synthesis) |
-| **Total Graph Steps** | ~30+ | **14 LLM calls** |
+| **Total** | ~15 steps | **8 LLM calls** |
 
-### Why 14 HTTP Requests Didn't Hit Limit of 25?
+> **Improvement:** Two-phase policy loading reduced total LLM calls from 14 to 8 by loading only relevant policies.
+
+### Understanding Recursion Limits
 
 The **recursion limit** in LangGraph counts **graph node transitions**, not HTTP/LLM calls.
 
@@ -306,7 +353,7 @@ Each triage cycle (`triage_nurse` → `tools` → `triage_nurse`) consumes 3+ gr
 3. Return to `triage_nurse` node
 4. Transition to `supervisor` node
 
-With 4 triage cycles, 5 supervisor visits, and the care coordinator visit, the total exceeded the default limit of 25. Increasing to `recursion_limit: 50` provided enough headroom.
+The current configuration uses `recursion_limit: 150` to provide headroom for complex requests.
 
 ---
 
@@ -314,7 +361,9 @@ With 4 triage cycles, 5 supervisor visits, and the care coordinator visit, the t
 
 1. **Iterative Information Gathering** — The agent learned the insurance plan from `patient_record` and corrected subsequent `coverage_check` calls.
 
-2. **Nested LLM in Tools** — The `policy_check` tool dynamically interprets policy documents using an LLM, demonstrating tool-within-tool patterns.
+2. **Two-Phase Policy Loading** — The `policy_check` tool uses a two-phase approach:
+   - **Phase 1**: Reads README to identify relevant policies (reduces token usage)
+   - **Phase 2**: Loads only selected policies for evaluation
 
 3. **Graceful Hallucination Handling** — When the agent tried to call non-existent tools like `TRIAGE NOTES`, LangGraph's ToolNode returned errors, and the agent recovered.
 
