@@ -800,7 +800,8 @@ if __name__ == "__main__":
         {
             "messages": [HumanMessage(content=sample_query)],
             "next": "triage_nurse",
-        }
+        },
+        config={"recursion_limit": 50}
     )
 
     print("\n" + "=" * 80)
