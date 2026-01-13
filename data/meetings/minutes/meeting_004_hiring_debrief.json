@@ -1,0 +1,18 @@
+{
+  "summary": "Hiring Loop Debrief: Candidate strengths and weaknesses, team split, and decision to request SQL exercise.",
+  "decisions": [
+    "Request SQL exercise before final decision"
+  ],
+  "action_items": [
+    {
+      "task": "Prepare SQL exercise",
+      "owner": null,
+      "due_date": "2026-01-03"
+    },
+    {
+      "task": "Schedule follow-up interview",
+      "owner": null,
+      "due_date": null
+    }
+  ]
+}

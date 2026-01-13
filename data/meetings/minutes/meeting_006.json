@@ -1,0 +1,24 @@
+{
+  "summary": "The meeting reviewed the recruitment drive's performance, discussed feedback, and outlined plans for next steps.",
+  "decisions": [
+    "Use the coding challenge format again next time",
+    "Add more technical interviewers for the next drive"
+  ],
+  "action_items": [
+    {
+      "task": "Compile final acceptance numbers",
+      "owner": "David",
+      "due_date": null
+    },
+    {
+      "task": "Send thank you notes to campus coordinators",
+      "owner": "David",
+      "due_date": null
+    },
+    {
+      "task": "Prepare onboarding schedule for new hires",
+      "owner": "Bob",
+      "due_date": null
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "summary": "The meeting reviewed customer feedback, decided on export performance and invoice changes, and assigned tasks to investigate and update invoices.",
+  "decisions": [
+    "exports performance is P0 for next sprint",
+    "rename 'Usage Units' to 'Credits' on invoices"
+  ],
+  "action_items": [
+    {
+      "task": "Open performance investigation ticket",
+      "owner": null,
+      "due_date": "2026-01-05"
+    },
+    {
+      "task": "Propose invoice wording changes",
+      "owner": null,
+      "due_date": "2026-01-12"
+    }
+  ]
+}

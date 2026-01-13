@@ -25,6 +25,10 @@ Reference : https://docs.langchain.com/oss/python/langgraph/workflows-agents
 
 from __future__ import annotations
 
+import os
+import time
+from pathlib import Path
+
 # Pydantic is used to define the "structured output" schema.
 # The model output will be parsed/validated into these classes.
 from pydantic import BaseModel, Field
@@ -36,11 +40,48 @@ from langchain_openai import ChatOpenAI
 # These message classes let you send a system instruction + a user prompt,
 # in a structured way, similar to OpenAI "roles".
 from langchain_core.messages import SystemMessage, HumanMessage
+from dotenv import load_dotenv
+from typing import Literal
+
+# Load .env from project root
+_env_path = Path(__file__).parent.parent / ".env"
+if _env_path.exists():
+    load_dotenv(_env_path)
 
 
 # ----------------------------
 # 1) Define output schema (Pydantic models)
 # ----------------------------
+
+# Categories for classifying meeting types
+MEETING_CATEGORIES = [
+    "engineering_sync",      # Regular engineering/tech team sync
+    "product_roadmap",       # Product planning and roadmap discussions
+    "incident_postmortem",   # Post-incident reviews and RCAs
+    "hiring",                # Interview debriefs and hiring discussions
+    "launch_readiness",      # Product/feature launch planning
+    "vendor_procurement",    # Vendor calls and procurement discussions
+    "research",              # Research and experimentation discussions
+    "customer_feedback",     # Customer feedback and support reviews
+    "leadership",            # Leadership updates and strategy
+    "other",                 # General/uncategorized meetings
+]
+
+# Type alias for category (Pydantic will validate against this)
+MeetingCategory = Literal[
+    "engineering_sync",
+    "product_roadmap",
+    "incident_postmortem",
+    "hiring",
+    "launch_readiness",
+    "vendor_procurement",
+    "research",
+    "customer_feedback",
+    "leadership",
+    "other",
+]
+
+
 class ActionItem(BaseModel):
     """
     One action item extracted from the notes.
@@ -55,6 +96,7 @@ class MeetingMinutes(BaseModel):
     Full structured output for meeting minutes.
     This is the top-level schema we want the LLM to return.
     """
+    category: MeetingCategory     # Type of meeting
     summary: str
     decisions: list[str] = Field(default_factory=list)
     action_items: list[ActionItem] = Field(default_factory=list)
@@ -63,15 +105,21 @@ class MeetingMinutes(BaseModel):
 # ----------------------------
 # 2) Configure the LLM client (OpenAI-compatible local endpoint)
 # ----------------------------
+# Read configuration from environment (keeps the lab flexible)
+_model = os.getenv("MODEL", "Ministral-3B-Instruct")
+_base_url = os.getenv("BASE_URL", "http://localhost:8090/v1")
+_api_key = os.getenv("API_KEY", "NONE")
+
+print("\n=== LLM CONNECTION DETAILS ===")
+print(f"model     : {_model}")
+print(f"base_url  : {_base_url}")
+print(f"api_key   : {'***' if _api_key else 'NOT SET'}")
+print()
+
 local_llm = ChatOpenAI(
-    # Name must match what your local server understands
-    model="Ministral-3B-Instruct",           # Replace with your desired model
-
-    # IMPORTANT: This points to your local OpenAI-compatible server
-    base_url="http://localhost:8090/v1",     # Replace with your custom URL
-
-    # Many local servers accept any string as the key; OpenAI requires a real key.
-    api_key="NONE",
+    model=_model,
+    base_url=_base_url,
+    api_key=_api_key,
 )
 
 
@@ -102,7 +150,9 @@ def dump_json(obj: BaseModel) -> str:
 # - Tell the model about the schema (often via tool-calling / JSON schema)
 # - Parse the model response into the Pydantic class
 # - Validate fields & types (task must be str, etc.)
-structured_llm = local_llm.with_structured_output(MeetingMinutes)
+#
+# Using include_raw=True gives us access to the raw AIMessage with token usage.
+structured_llm = local_llm.with_structured_output(MeetingMinutes, include_raw=True)
 
 
 # ----------------------------
@@ -111,6 +161,7 @@ structured_llm = local_llm.with_structured_output(MeetingMinutes)
 SYSTEM_INSTRUCTIONS = (
     "You convert meeting notes into structured minutes.\n"
     "Rules:\n"
+    f"- Classify the meeting into one of these categories: {', '.join(MEETING_CATEGORIES)}\n"
     "- Put only firm decisions in decisions.\n"
     "- Action items must be concrete tasks.\n"
     "- If owner or due date is missing, output null.\n"
@@ -232,12 +283,29 @@ def main() -> None:
         ]
 
         try:
-            # Because we used `with_structured_output(MeetingMinutes)`,
-            # LangChain returns an instance of MeetingMinutes (not raw text).
-            minutes: MeetingMinutes = structured_llm.invoke(messages)
+            # Because we used `with_structured_output(MeetingMinutes, include_raw=True)`,
+            # LangChain returns a dict with 'parsed' and 'raw' keys.
+            start_time = time.time()
+            result = structured_llm.invoke(messages)
+            elapsed = time.time() - start_time
+
+            # Extract the parsed MeetingMinutes and raw AIMessage
+            minutes: MeetingMinutes = result["parsed"]
+            raw_msg = result.get("raw")
 
             # Pretty print JSON for easy reading / copy-paste into docs
             print(dump_json(minutes))
+
+            # Extract token usage from raw response
+            usage = getattr(raw_msg, "response_metadata", {}).get("token_usage", {}) if raw_msg else {}
+            input_tokens = usage.get("prompt_tokens", "N/A")
+            total_tokens = usage.get("total_tokens", "N/A")
+
+            # Print LLM call stats
+            print(f"\n--- LLM Call Stats ---")
+            print(f"time      : {elapsed:.2f}s")
+            print(f"input tok : {input_tokens}")
+            print(f"total tok : {total_tokens}")
 
         except Exception as e:
             # Common causes in a lab:

@@ -1,0 +1,24 @@
+{
+  "summary": "Budget review discussed, 70% spent, training budget approved, reminders and reports scheduled.",
+  "decisions": [
+    "Budget approved for 70% spending",
+    "Training budget allocation confirmed"
+  ],
+  "action_items": [
+    {
+      "task": "Send training budget reminder",
+      "owner": null,
+      "due_date": null
+    },
+    {
+      "task": "Prepare mid-quarter budget report",
+      "owner": null,
+      "due_date": null
+    },
+    {
+      "task": "Confirm license renewal amount",
+      "owner": null,
+      "due_date": null
+    }
+  ]
+}

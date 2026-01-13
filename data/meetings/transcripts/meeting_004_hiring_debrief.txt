@@ -1,0 +1,9 @@
+Reference date: 2026-01-05
+Meeting: Hiring Loop Debrief (Backend Engineer)
+
+Notes:
+- Candidate strong in systems, weaker in SQL.
+- Team split: 2 "hire", 1 "no hire".
+- Decision: request a 30-min SQL exercise before final decision.
+- Action: Sameer to prepare SQL exercise and send to recruiter by Wednesday.
+- Action: Kavita to schedule follow-up interview.

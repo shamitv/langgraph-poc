@@ -1,0 +1,31 @@
+{
+  "summary": "Meeting discusses workload distribution, task assignments, and follow-up actions.",
+  "decisions": [
+    "Redistribute testing tasks to balance workload",
+    "Mentor new hire",
+    "Send self-review by Friday",
+    "Track blockers for next chat"
+  ],
+  "action_items": [
+    {
+      "task": "Redistribute testing tasks",
+      "owner": null,
+      "due_date": "2026-01-30"
+    },
+    {
+      "task": "Mentor new hire",
+      "owner": null,
+      "due_date": "2026-01-30"
+    },
+    {
+      "task": "Send self-review",
+      "owner": "Charlie",
+      "due_date": "2026-01-30"
+    },
+    {
+      "task": "Track blockers",
+      "owner": "Charlie",
+      "due_date": "2026-01-30"
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "summary": "Sprint planning session concluded with commitment to five stories and task assignments.",
+  "decisions": [
+    "Commitment to five stories for sprint",
+    "Acceptance criteria for story added",
+    "Design mockups requested"
+  ],
+  "action_items": [
+    {
+      "task": "Add acceptance criteria to story",
+      "owner": null,
+      "due_date": null
+    },
+    {
+      "task": "Update sprint goal in Jira",
+      "owner": null,
+      "due_date": null
+    },
+    {
+      "task": "Request design mockups",
+      "owner": null,
+      "due_date": null
+    }
+  ]
+}

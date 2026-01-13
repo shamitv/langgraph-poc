@@ -1,0 +1,24 @@
+{
+  "summary": "Meeting decided on Pune for offsite and allocated two lakhs budget.",
+  "decisions": [
+    "Decision to proceed with Pune for the offsite",
+    "Budget allocation of two lakhs for the entire event including travel"
+  ],
+  "action_items": [
+    {
+      "task": "Book conference room at Pune office",
+      "owner": null,
+      "due_date": null
+    },
+    {
+      "task": "Send travel survey to the team",
+      "owner": null,
+      "due_date": null
+    },
+    {
+      "task": "Get quotes from the travel agency",
+      "owner": null,
+      "due_date": null
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+Reference date: 2026-01-05
+Meeting: Incident Postmortem - Export Service
+
+Timeline (UTC):
+- 02:10 alert fired
+- 02:18 rollback started
+- 02:27 recovery confirmed
+
+Discussion:
+- Root cause suspected: config flag enabled in prod without canary.
+- Decision: enforce change management checklist for prod flags.
+- Action: SRE team to add "flag diff" step in deploy pipeline by 2026-01-10.
+- Action: Riya to draft a short RCA summary for leadership.

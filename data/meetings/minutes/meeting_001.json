@@ -1,0 +1,19 @@
+{
+  "summary": "Agreed to deploy sprint demo to staging tomorrow and release production on next Thursday. Tasks include updating release notes and scheduling product team demo. Neha will handle QA and performance tests.",
+  "decisions": [
+    "Deploy sprint demo to staging tomorrow",
+    "Production release scheduled for next Thursday"
+  ],
+  "action_items": [
+    {
+      "task": "Update release notes",
+      "owner": null,
+      "due_date": "2026-01-06T23:59:59"
+    },
+    {
+      "task": "Schedule product team demo",
+      "owner": null,
+      "due_date": "2026-01-07T10:00:00"
+    }
+  ]
+}

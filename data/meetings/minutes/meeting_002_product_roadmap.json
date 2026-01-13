@@ -1,0 +1,18 @@
+{
+  "summary": "Decision: onboarding v2 ships this sprint; analytics refactor moved to next sprint. Action items: Aditi updates Jira epics and sprint board today; Mohit writes migration notes for support team (no date).",
+  "decisions": [
+    "onboarding v2 ships this sprint; analytics refactor moved to next sprint"
+  ],
+  "action_items": [
+    {
+      "task": "Update Jira epics and sprint board",
+      "owner": "Aditi",
+      "due_date": null
+    },
+    {
+      "task": "Write migration notes for support team",
+      "owner": "Mohit",
+      "due_date": null
+    }
+  ]
+}

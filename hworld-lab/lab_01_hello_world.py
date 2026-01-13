@@ -34,9 +34,17 @@ TEMP       : temperature (default: 0)
 from __future__ import annotations
 
 import os
+import time
+from pathlib import Path
 
 from langchain_openai import ChatOpenAI
 from langchain_core.messages import SystemMessage, HumanMessage
+from dotenv import load_dotenv
+
+# Load .env from project root
+_env_path = Path(__file__).parent.parent / ".env"
+if _env_path.exists():
+    load_dotenv(_env_path)
 
 
 def main() -> None:
@@ -56,6 +64,13 @@ def main() -> None:
     # -------------------------------------------------------------------------
     # 2) Create the chat model wrapper
     # -------------------------------------------------------------------------
+    print("\n=== LLM CONNECTION DETAILS ===")
+    print(f"model     : {model}")
+    print(f"base_url  : {base_url}")
+    print(f"api_key   : {'***' if api_key else 'NOT SET'}")
+    print(f"temp      : {temperature}")
+    print()
+
     llm = ChatOpenAI(
         model=model,
         base_url=base_url,
@@ -84,18 +99,25 @@ def main() -> None:
     # -------------------------------------------------------------------------
     # 4) Call the model and print the response text
     # -------------------------------------------------------------------------
+    start_time = time.time()
     response = llm.invoke(messages)
+    elapsed = time.time() - start_time
 
-    print("\n=== CONFIG ===")
-    print(f"model     : {model}")
-    print(f"base_url  : {base_url}")
-    print(f"temp      : {temperature}")
+    # Extract token usage from response metadata
+    usage = getattr(response, "response_metadata", {}).get("token_usage", {})
+    input_tokens = usage.get("prompt_tokens", "N/A")
+    total_tokens = usage.get("total_tokens", "N/A")
 
     print("\n=== PROMPT ===")
     print(user_prompt)
 
     print("\n=== RESPONSE ===")
     print(response.content)
+
+    print("\n=== LLM CALL STATS ===")
+    print(f"time      : {elapsed:.2f}s")
+    print(f"input tok : {input_tokens}")
+    print(f"total tok : {total_tokens}")
 
 
 if __name__ == "__main__":

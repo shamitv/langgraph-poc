@@ -1,0 +1,19 @@
+{
+  "summary": "Weekly Engineering Sync meeting discussed API latency issues, decided to adjust nightly job schedule, and assigned tasks to Rahul and Neha.",
+  "decisions": [
+    "Move nightly job from 6pm to 11pm IST starting tomorrow.",
+    "Add dashboard panel for p95 and error rate by tomorrow."
+  ],
+  "action_items": [
+    {
+      "task": "Add dashboard panel for p95 and error rate",
+      "owner": "Rahul",
+      "due_date": null
+    },
+    {
+      "task": "Check Redis eviction policy",
+      "owner": "Neha",
+      "due_date": null
+    }
+  ]
+}

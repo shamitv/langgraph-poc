@@ -198,10 +198,13 @@ def clean_minutes_dir(minutes_dir: Path) -> int:
 
 
 def main() -> None:
+    # Default root is this script's directory (not CWD)
+    script_dir = str(Path(__file__).parent.resolve())
+    
     parser = argparse.ArgumentParser(description="Prepare tool-calling lab folders and sample meeting notes.")
-    parser.add_argument("--root", default=".", help="Root folder for lab directories (default: current directory).")
-    parser.add_argument("--meetings-dir", default="meetings", help="Meetings input directory name (default: meetings).")
-    parser.add_argument("--minutes-dir", default="minutes", help="Minutes output directory name (default: minutes).")
+    parser.add_argument("--root", default=script_dir, help="Root folder for lab directories (default: script directory).")
+    parser.add_argument("--meetings-dir", default="../data/meetings/transcripts", help="Meetings input directory path (default: ../data/meetings/transcripts).")
+    parser.add_argument("--minutes-dir", default="../data/meetings/minutes", help="Minutes output directory path (default: ../data/meetings/minutes).")
     parser.add_argument("--force", action="store_true", help="Overwrite existing sample files if they already exist.")
     parser.add_argument(
         "--clean-minutes",
@@ -245,7 +248,7 @@ def main() -> None:
     print(f"  Minutes dir : {minutes_dir}")
     print(f"  Sample files written: {written}")
     print(f"  Sample files skipped (already existed): {skipped}")
-    print("\nNext: run your tool-calling lab script to process ./meetings into ./minutes.")
+    print("\nNext: run your tool-calling lab script to process transcripts into minutes.")
 
 
 if __name__ == "__main__":

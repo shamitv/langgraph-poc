@@ -1,0 +1,26 @@
+{
+  "summary": "Project status review, budget oversight, risk management, and action item assignments confirmed.",
+  "decisions": [
+    "Project slightly under budget",
+    "Third-party integration risk identified",
+    "Buffer days added for integration work",
+    "Risk register prepared for next meeting"
+  ],
+  "action_items": [
+    {
+      "task": "Update project status document",
+      "owner": "Rahul",
+      "due_date": null
+    },
+    {
+      "task": "Send stakeholder update email",
+      "owner": "Alice",
+      "due_date": null
+    },
+    {
+      "task": "Prepare risk register",
+      "owner": "Alice",
+      "due_date": null
+    }
+  ]
+}

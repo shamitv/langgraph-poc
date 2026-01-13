@@ -1,0 +1,23 @@
+{
+  "summary": "Meeting discussed stopping old auth endpoint by Feb, updating docs and notifying integrators, rotating API keys for partnerX, and addressing rate limit errors post-release.",
+  "decisions": [
+    "Stop using old auth endpoint by Feb"
+  ],
+  "action_items": [
+    {
+      "task": "Stop using old auth endpoint",
+      "owner": null,
+      "due_date": "2026-02-05"
+    },
+    {
+      "task": "Update docs and notify integrators",
+      "owner": null,
+      "due_date": null
+    },
+    {
+      "task": "Rotate API keys for partnerX",
+      "owner": null,
+      "due_date": "2026-03-05"
+    }
+  ]
+}

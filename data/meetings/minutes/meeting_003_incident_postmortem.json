@@ -1,0 +1,18 @@
+{
+  "summary": "The Incident Postmortem discussed the root cause of a production error, leading to the decision to enforce a change management checklist for prod flags and an action to add a 'flag diff' step in the deploy pipeline by January 10, 2026.",
+  "decisions": [
+    "Enforce change management checklist for prod flags"
+  ],
+  "action_items": [
+    {
+      "task": "Add 'flag diff' step in deploy pipeline",
+      "owner": "SRE team",
+      "due_date": "2026-01-10"
+    },
+    {
+      "task": "Draft a short RCA summary for leadership",
+      "owner": "Riya",
+      "due_date": null
+    }
+  ]
+}

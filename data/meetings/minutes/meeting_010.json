@@ -1,0 +1,25 @@
+{
+  "summary": "Discussion on improving incident response, connection pooling, and alert thresholds.",
+  "decisions": [
+    "Create ticket for connection pooling",
+    "Document incident in runbook",
+    "Review alert configuration"
+  ],
+  "action_items": [
+    {
+      "task": "Create ticket for connection pooling",
+      "owner": "Priya",
+      "due_date": null
+    },
+    {
+      "task": "Document incident in runbook",
+      "owner": "Amit",
+      "due_date": null
+    },
+    {
+      "task": "Review alert configuration",
+      "owner": "Neha",
+      "due_date": null
+    }
+  ]
+}

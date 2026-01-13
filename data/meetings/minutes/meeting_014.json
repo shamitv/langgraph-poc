@@ -1,0 +1,25 @@
+{
+  "summary": "Discussion on user onboarding flow, progressive profiling, tooltips, and task assignments for mockups, tests, and documentation.",
+  "decisions": [
+    "Implement progressive profiling in onboarding flow",
+    "Add tooltips for required fields",
+    "Document design decisions"
+  ],
+  "action_items": [
+    {
+      "task": "Create high-fidelity mockups",
+      "owner": "Bob",
+      "due_date": "2026-03-01"
+    },
+    {
+      "task": "Run user tests on new flow",
+      "owner": "Charlie",
+      "due_date": "2026-03-01"
+    },
+    {
+      "task": "Document design decisions",
+      "owner": "Amit",
+      "due_date": "2026-03-01"
+    }
+  ]
+}

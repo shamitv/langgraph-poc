@@ -20,10 +20,10 @@ pip install pydantic langchain-openai langchain-core
 Folder setup
 ------------
 Create:
-  ./meetings   (put .txt meeting notes here)
-  ./minutes    (will be created if missing)
+  ../data/meetings/transcripts   (put .txt meeting notes here)
+  ../data/meetings/minutes       (will be created if missing)
 
-Example file: ./meetings/meeting_001.txt
+Example file: ../data/meetings/transcripts/meeting_001.txt
 ----------------------------------------
 Attendees: Rahul, Neha
 Decided: move job to 11pm
@@ -43,19 +43,57 @@ Notes / Troubleshooting
 from __future__ import annotations
 
 import json
+import os
+import time
 from pathlib import Path
-from typing import Any
+from typing import Any, Literal
 
 from pydantic import BaseModel, Field
+from dotenv import load_dotenv
 
 from langchain_openai import ChatOpenAI
 from langchain_core.messages import SystemMessage, HumanMessage, ToolMessage
 from langchain_core.tools import tool
 
+# Load .env from project root
+_env_path = Path(__file__).parent.parent / ".env"
+if _env_path.exists():
+    load_dotenv(_env_path)
+
 
 # =============================================================================
 # 1) Structured output schema we want to SAVE (Pydantic)
 # =============================================================================
+
+# Categories for classifying meeting types
+MEETING_CATEGORIES = [
+    "engineering_sync",      # Regular engineering/tech team sync
+    "product_roadmap",       # Product planning and roadmap discussions
+    "incident_postmortem",   # Post-incident reviews and RCAs
+    "hiring",                # Interview debriefs and hiring discussions
+    "launch_readiness",      # Product/feature launch planning
+    "vendor_procurement",    # Vendor calls and procurement discussions
+    "research",              # Research and experimentation discussions
+    "customer_feedback",     # Customer feedback and support reviews
+    "leadership",            # Leadership updates and strategy
+    "other",                 # General/uncategorized meetings
+]
+
+# Type alias for category (Pydantic will validate against this)
+MeetingCategory = Literal[
+    "engineering_sync",
+    "product_roadmap",
+    "incident_postmortem",
+    "hiring",
+    "launch_readiness",
+    "vendor_procurement",
+    "research",
+    "customer_feedback",
+    "leadership",
+    "other",
+]
+
+
 class ActionItem(BaseModel):
     task: str
     owner: str | None = None
@@ -63,6 +101,7 @@ class ActionItem(BaseModel):
 
 
 class MeetingMinutes(BaseModel):
+    category: MeetingCategory     # Type of meeting
     summary: str
     decisions: list[str] = Field(default_factory=list)
     action_items: list[ActionItem] = Field(default_factory=list)
@@ -189,10 +228,21 @@ TOOLS_BY_NAME = {t.name: t for t in TOOLS}  # Used by our tool-loop executor
 # =============================================================================
 # 3) LLM configuration (OpenAI-compatible)
 # =============================================================================
+# Read configuration from environment (keeps the lab flexible)
+_model = os.getenv("MODEL", "Ministral-3B-Instruct")
+_base_url = os.getenv("BASE_URL", "http://localhost:8090/v1")
+_api_key = os.getenv("API_KEY", "NONE")
+
+print("\n=== LLM CONNECTION DETAILS ===")
+print(f"model     : {_model}")
+print(f"base_url  : {_base_url}")
+print(f"api_key   : {'***' if _api_key else 'NOT SET'}")
+print()
+
 llm = ChatOpenAI(
-    model="Ministral-3B-Instruct",         # change if your local server uses a different name
-    base_url="http://localhost:8090/v1",   # your OpenAI-compatible endpoint
-    api_key="NONE",                        # local servers often accept any string
+    model=_model,
+    base_url=_base_url,
+    api_key=_api_key,
     temperature=0,
     timeout=120,
 ).bind_tools(TOOLS)  # <-- This enables tool calling: the model can request tool executions
@@ -214,13 +264,14 @@ def _call_tool(tool_obj: Any, args: dict) -> Any:
     return tool_obj.run(**args)
 
 
-def run_tool_loop(messages: list, max_rounds: int = 10) -> tuple[Any, list[tuple[str, dict, Any]]]:
+def run_tool_loop(messages: list, max_rounds: int = 10) -> tuple[Any, list[tuple[str, dict, Any]], dict]:
     """
     Run the conversation until the model stops requesting tool calls.
 
     Returns:
       final_ai_message: last AI message (no more tool calls)
       trace: a list of (tool_name, tool_args, tool_result) executed in order
+      stats: dict with timing and token usage info
 
     How it works:
     - Call LLM with current messages.
@@ -229,14 +280,34 @@ def run_tool_loop(messages: list, max_rounds: int = 10) -> tuple[Any, list[tuple
     - Repeat until the AI stops calling tools or max_rounds is reached.
     """
     trace: list[tuple[str, dict, Any]] = []
+    total_input_tokens = 0
+    total_output_tokens = 0
+    total_tokens = 0
+    llm_call_count = 0
+    start_time = time.time()
 
     for _ in range(max_rounds):
         ai_msg = llm.invoke(messages)
         messages.append(ai_msg)
+        llm_call_count += 1
+
+        # Accumulate token usage from each LLM call
+        usage = getattr(ai_msg, "response_metadata", {}).get("token_usage", {})
+        total_input_tokens += usage.get("prompt_tokens", 0)
+        total_output_tokens += usage.get("completion_tokens", 0)
+        total_tokens += usage.get("total_tokens", 0)
 
         tool_calls = getattr(ai_msg, "tool_calls", None) or []
         if not tool_calls:
-            return ai_msg, trace
+            elapsed = time.time() - start_time
+            stats = {
+                "elapsed_time": elapsed,
+                "llm_calls": llm_call_count,
+                "input_tokens": total_input_tokens,
+                "output_tokens": total_output_tokens,
+                "total_tokens": total_tokens,
+            }
+            return ai_msg, trace, stats
 
         # Execute each requested tool call
         for call in tool_calls:
@@ -269,8 +340,10 @@ def run_tool_loop(messages: list, max_rounds: int = 10) -> tuple[Any, list[tuple
 #    (B) Iterate in Python over each meeting file
 #    (C) For each file, ask model to read + extract + save via tools
 # =============================================================================
-MEETINGS_DIR = "./meetings"
-MINUTES_DIR = "./minutes"
+# Resolve paths relative to this script's location (not CWD)
+_SCRIPT_DIR = Path(__file__).parent.resolve()
+MEETINGS_DIR = str(_SCRIPT_DIR / "../data/meetings/transcripts")
+MINUTES_DIR = str(_SCRIPT_DIR / "../data/meetings/minutes")
 
 # System prompt used for per-file processing.
 # We explicitly tell the model to:
@@ -286,6 +359,7 @@ You MUST use tools when appropriate:
 {minutes_schema_for_prompt()}
 
 Rules for minutes:
+- category: classify into one of: """ + ', '.join(MEETING_CATEGORIES) + """
 - summary: brief, 1-3 sentences
 - decisions: include only firm decisions
 - action_items: concrete tasks; set owner/due_date to null if missing
@@ -319,7 +393,14 @@ def main() -> None:
         ),
     ]
 
-    _, list_trace = run_tool_loop(list_messages)
+    _, list_trace, list_stats = run_tool_loop(list_messages)
+
+    # Print stats for listing operation
+    print(f"\n--- LLM Call Stats (listing) ---")
+    print(f"time       : {list_stats['elapsed_time']:.2f}s")
+    print(f"llm calls  : {list_stats['llm_calls']}")
+    print(f"input tok  : {list_stats['input_tokens']}")
+    print(f"total tok  : {list_stats['total_tokens']}")
 
     # Pull file list directly from the tool result (most reliable for labs)
     meeting_files: list[str] = []
@@ -332,7 +413,7 @@ def main() -> None:
         print(f" - {f}")
 
     if not meeting_files:
-        print("\nNo meeting files found. Add .txt files to ./meetings and rerun.")
+        print("\nNo meeting files found. Add .txt files to ../data/meetings/transcripts and rerun.")
         return
 
     # -------------------------------------------------------------------------
@@ -359,7 +440,14 @@ def main() -> None:
             ),
         ]
 
-        final_msg, trace = run_tool_loop(per_file_messages)
+        final_msg, trace, stats = run_tool_loop(per_file_messages)
+
+        # Print LLM call stats for this file
+        print(f"\n--- LLM Call Stats ---")
+        print(f"time       : {stats['elapsed_time']:.2f}s")
+        print(f"llm calls  : {stats['llm_calls']}")
+        print(f"input tok  : {stats['input_tokens']}")
+        print(f"total tok  : {stats['total_tokens']}")
 
         # Show what got saved (from tool trace) for deterministic lab feedback
         saved_paths = [
@@ -383,7 +471,7 @@ def main() -> None:
             print("\nModel final message:")
             print(final_msg.content)
 
-    print("\nDone. Check the ./minutes directory for JSON outputs.")
+    print("\nDone. Check the ../data/meetings/minutes directory for JSON outputs.")
 
 
 if __name__ == "__main__":
