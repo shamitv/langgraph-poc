@@ -38,8 +38,8 @@ if _env_path.exists():
 # Config
 # ----------------------------
 llm_type = "vllm"  # e.g., "llama.cpp", "vllm", "qwen3", etc.
-llm_url = os.getenv("OPENAI_BASE_URL", "http://localhost:8070/v1")  # OpenAI-compatible base URL
-model_id = os.getenv("OPENAI_MODEL", "Qwen3-1.7B")                  # server model name/id
+llm_url = os.getenv("BASE_URL", "http://localhost:8070/v1")  # OpenAI-compatible base URL
+model_id = os.getenv("MODEL", "Qwen3-1.7B")                  # server model name/id
 
 
 # ----------------------------
